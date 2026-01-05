@@ -14,7 +14,7 @@ sudo journalctl -u pg-collector -n 50
 # Test configuration
 pg-collector --config /etc/pg-collector/config.yaml --validate
 
-# Test connection
+# Test connections
 pg-collector --config /etc/pg-collector/config.yaml --test
 
 # Check health endpoint
@@ -25,7 +25,7 @@ curl http://localhost:8080/health
 
 ## Connection Issues
 
-### Cannot connect to PostgreSQL
+### Cannot Connect to PostgreSQL
 
 **Symptoms:**
 ```
@@ -38,7 +38,6 @@ ERROR: connection timed out
 1. **Check network connectivity:**
    ```bash
    nc -zv db.example.com 5432
-   telnet db.example.com 5432
    ```
 
 2. **Check PostgreSQL is listening:**
@@ -48,19 +47,15 @@ ERROR: connection timed out
    ```
 
 3. **Check pg_hba.conf allows connection:**
-   ```bash
-   # Ensure your IP is allowed
+   ```
    hostssl all pgcollector YOUR_IP/32 cert
    ```
 
-4. **Check firewall:**
-   ```bash
-   # AWS Security Group - ensure inbound 5432 is allowed
-   # GCP Firewall - ensure ingress rule exists
-   sudo ufw status  # Linux
-   ```
+4. **Check firewall rules**
 
-### Certificate authentication failed
+---
+
+### Certificate Authentication Failed
 
 **Symptoms:**
 ```
@@ -103,7 +98,9 @@ SSL error: certificate verify failed
      sslrootcert=/etc/pg-collector/certs/ca.crt"
    ```
 
-### AWS IAM authentication failed
+---
+
+### AWS IAM Authentication Failed
 
 **Symptoms:**
 ```
@@ -121,30 +118,21 @@ ERROR: could not get IAM auth token
 
 2. **Verify user has rds_iam role:**
    ```sql
-   SELECT rolname, rolcanlogin FROM pg_roles WHERE rolname = 'pgcollector';
+   SELECT rolname FROM pg_roles WHERE rolname = 'pgcollector';
    \du pgcollector
-   -- Should show rds_iam in member of
    ```
 
 3. **Check IAM policy resource ARN:**
    - Region correct?
    - Account ID correct?
-   - DBI resource ID correct? (not instance name)
+   - DBI resource ID correct?
    - Username correct?
-
-4. **Test token generation:**
-   ```bash
-   aws rds generate-db-auth-token \
-     --hostname mydb.xxx.us-east-1.rds.amazonaws.com \
-     --port 5432 \
-     --username pgcollector
-   ```
 
 ---
 
 ## Output Issues
 
-### S3 upload failed
+### S3 Upload Failed
 
 **Symptoms:**
 ```
@@ -154,114 +142,30 @@ ERROR: Access Denied
 
 **Solutions:**
 
-1. **Check IAM permissions:**
-   ```json
-   {
-     "Effect": "Allow",
-     "Action": ["s3:PutObject", "s3:GetObject"],
-     "Resource": "arn:aws:s3:::bucket-name/*"
-   }
-   ```
+1. **Check IAM permissions include:**
+   - `s3:PutObject`
+   - `s3:GetObject`
 
-2. **Check bucket exists and region is correct:**
+2. **Check bucket exists:**
    ```bash
    aws s3 ls s3://your-bucket/
    ```
 
-3. **Check bucket policy allows writes:**
-   ```bash
-   aws s3api get-bucket-policy --bucket your-bucket
-   ```
-
-4. **Test S3 access:**
+3. **Test S3 access:**
    ```bash
    echo "test" | aws s3 cp - s3://your-bucket/test.txt
-   ```
-
-### Kafka connection failed
-
-**Symptoms:**
-```
-ERROR: kafka: client has run out of available brokers
-ERROR: kafka: failed to produce message
-```
-
-**Solutions:**
-
-1. **Check broker connectivity:**
-   ```bash
-   nc -zv kafka-broker:9092
-   ```
-
-2. **Check TLS configuration if enabled**
-
-3. **Verify topic exists:**
-   ```bash
-   kafka-topics.sh --list --bootstrap-server kafka:9092
-   ```
-
----
-
-## Performance Issues
-
-### High memory usage
-
-**Symptoms:**
-- Memory usage exceeds configured limit
-- OOM kills
-
-**Solutions:**
-
-1. **Check buffer configuration:**
-   ```yaml
-   limits:
-     memory_buffer_size: 52428800  # 50MB default
-   ```
-
-2. **Check for output backpressure:**
-   ```bash
-   curl http://localhost:8080/status | jq '.buffer'
-   ```
-
-3. **Reduce sampling frequency for non-critical metrics:**
-   ```yaml
-   sampling:
-     statements: 60s  # Increase from 30s
-     tables: 120s     # Increase from 60s
-   ```
-
-### High CPU usage
-
-**Symptoms:**
-- CPU consistently high
-- Slow response times
-
-**Solutions:**
-
-1. **Check for query timeout issues:**
-   ```bash
-   grep "query timeout" /var/log/pg-collector/collector.log
-   ```
-
-2. **Reduce sampling frequency**
-
-3. **Check PostgreSQL query performance:**
-   ```sql
-   SELECT * FROM pg_stat_statements
-   WHERE query LIKE '%pg_stat%'
-   ORDER BY total_time DESC;
    ```
 
 ---
 
 ## Service Issues
 
-### Service won't start
+### Service Won't Start
 
 **Symptoms:**
 ```
 systemctl status pg-collector
-● pg-collector.service - PostgreSQL Metrics Collector
+● pg-collector.service
    Active: failed
 ```
 
@@ -288,32 +192,23 @@ systemctl status pg-collector
    sudo -u pg-collector pg-collector --config /etc/pg-collector/config.yaml
    ```
 
-### Service keeps restarting
+---
 
-**Symptoms:**
-- Service restarts frequently
-- Circuit breaker open
+### High Resource Usage
 
-**Solutions:**
+**Memory:**
+- Check configured limits in config.yaml
+- Reduce sampling frequency
 
-1. **Check for persistent connection issues**
-
-2. **Review circuit breaker status:**
-   ```bash
-   curl http://localhost:8080/status | jq '.circuit_breakers'
-   ```
-
-3. **Check for resource exhaustion:**
-   ```bash
-   df -h /var/lib/pg-collector/
-   free -m
-   ```
+**CPU:**
+- Reduce sampling frequency
+- Check for output backpressure
 
 ---
 
 ## Health Check Issues
 
-### Health endpoint returns unhealthy
+### Health Endpoint Returns Unhealthy
 
 **Symptoms:**
 ```json
@@ -325,12 +220,24 @@ systemctl status pg-collector
 
 **Solutions:**
 
-1. **Check component status:**
+1. **Check detailed status:**
    ```bash
    curl http://localhost:8080/status | jq
    ```
 
 2. **Identify failing component and address specific issue**
+
+---
+
+## Common Error Messages
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `connection refused` | PostgreSQL not reachable | Check network/firewall |
+| `certificate verify failed` | Wrong CA certificate | Use correct ca.crt |
+| `authentication failed` | Wrong auth method | Check auth_method config |
+| `permission denied` | Missing grants | Grant pg_monitor role |
+| `timeout` | Query too slow | Increase query_timeout |
 
 ---
 
@@ -340,12 +247,12 @@ If you're still having issues:
 
 1. **Collect diagnostics:**
    ```bash
-   pg-collector --config /etc/pg-collector/config.yaml --diagnostics > diag.txt
+   pg-collector --config /etc/pg-collector/config.yaml --diagnostics
    ```
 
 2. **Check logs:**
    ```bash
-   sudo journalctl -u pg-collector --since "1 hour ago" > logs.txt
+   sudo journalctl -u pg-collector --since "1 hour ago"
    ```
 
 3. **Open an issue:** [GitHub Issues](https://github.com/burnside-project/pg-collector/issues)

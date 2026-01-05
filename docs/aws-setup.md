@@ -44,23 +44,20 @@ aws rds modify-db-instance \
 
 ## Step 2: Create Database User
 
-Connect to your database and create the monitoring user:
+Connect to your database:
 
 ```sql
--- Create user with rds_iam role (enables IAM auth)
+-- Create user with rds_iam role
 CREATE USER pgcollector WITH LOGIN;
 GRANT rds_iam TO pgcollector;
 
 -- Grant monitoring permissions
 GRANT pg_monitor TO pgcollector;
-GRANT USAGE ON SCHEMA public TO pgcollector;
 ```
 
 ---
 
 ## Step 3: Create IAM Policy
-
-Create an IAM policy for database access:
 
 ```json
 {
@@ -69,25 +66,22 @@ Create an IAM policy for database access:
     {
       "Effect": "Allow",
       "Action": "rds-db:connect",
-      "Resource": "arn:aws:rds-db:us-east-1:123456789012:dbuser:db-XXXXX/pgcollector"
+      "Resource": "arn:aws:rds-db:REGION:ACCOUNT_ID:dbuser:DBI_RESOURCE_ID/pgcollector"
     }
   ]
 }
 ```
 
 Replace:
-- `us-east-1` with your region
-- `123456789012` with your AWS account ID
-- `db-XXXXX` with your DBI resource ID (found in RDS console → Configuration)
-- `pgcollector` with your database username
+- `REGION` with your region (e.g., `us-east-1`)
+- `ACCOUNT_ID` with your AWS account ID
+- `DBI_RESOURCE_ID` with your database resource ID (found in RDS Console → Configuration)
 
 ---
 
 ## Step 4: Create IAM Role
 
 ### For EC2
-
-Create a role with the policy and attach to your EC2 instance:
 
 ```bash
 # Create role
@@ -105,40 +99,27 @@ aws iam create-role \
 # Attach policy
 aws iam attach-role-policy \
   --role-name pg-collector-role \
-  --policy-arn arn:aws:iam::123456789012:policy/pg-collector-rds-connect
+  --policy-arn arn:aws:iam::ACCOUNT_ID:policy/pg-collector-rds-connect
 
-# Create instance profile
-aws iam create-instance-profile \
-  --instance-profile-name pg-collector-profile
-
+# Create instance profile and attach to EC2
+aws iam create-instance-profile --instance-profile-name pg-collector-profile
 aws iam add-role-to-instance-profile \
   --instance-profile-name pg-collector-profile \
   --role-name pg-collector-role
-
-# Attach to EC2 instance
-aws ec2 associate-iam-instance-profile \
-  --instance-id i-1234567890abcdef0 \
-  --iam-instance-profile Name=pg-collector-profile
 ```
 
 ### For ECS
 
 Add the policy to your ECS task role.
 
-### For Lambda
-
-Add the policy to your Lambda execution role.
-
 ---
 
 ## Step 5: Download RDS CA Certificate
 
 ```bash
-# Download RDS CA bundle
 curl -o /etc/pg-collector/certs/rds-ca-bundle.pem \
   https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
 
-# Set permissions
 sudo chmod 644 /etc/pg-collector/certs/rds-ca-bundle.pem
 ```
 
@@ -147,10 +128,8 @@ sudo chmod 644 /etc/pg-collector/certs/rds-ca-bundle.pem
 ## Step 6: Configure PG Collector
 
 ```yaml
-customer_id: "cust_your_id"
+customer_id: "your_customer_id"
 database_id: "db_rds_prod"
-tenant_tier: "starter"
-output_mode: "s3_only"
 
 postgres:
   conn_string: "postgres://pgcollector@mydb.xxxxx.us-east-1.rds.amazonaws.com:5432/postgres?sslmode=verify-full"
@@ -158,18 +137,14 @@ postgres:
   aws_iam:
     enabled: true
     region: "us-east-1"
-    # Optional: specify role ARN if not using instance profile
-    # role_arn: "arn:aws:iam::123456789012:role/pg-collector-role"
   tls:
     mode: verify-full
     ca_file: /etc/pg-collector/certs/rds-ca-bundle.pem
 
-s3:
-  enabled: true
+output:
+  type: s3
   region: "us-east-1"
   bucket: "your-metrics-bucket"
-  batch_interval: 5m
-  format: "parquet"
 ```
 
 ---
@@ -182,44 +157,31 @@ pg-collector --config /etc/pg-collector/config.yaml --test
 
 ---
 
-## Aurora-Specific Notes
+## Aurora Notes
 
-### Aurora Cluster Endpoint
+### Use Reader Endpoint
 
-Use the **reader endpoint** for monitoring to avoid impacting writes:
+Use the reader endpoint for monitoring to avoid impacting writes:
 
 ```yaml
 postgres:
   conn_string: "postgres://pgcollector@mydb.cluster-ro-xxxxx.us-east-1.rds.amazonaws.com:5432/postgres?sslmode=verify-full"
 ```
 
-### Aurora Serverless v2
-
-IAM authentication works the same way. Ensure your ACU (Aurora Capacity Units) settings allow for the additional connection.
-
 ---
 
-## S3 Output Configuration
+## S3 Output Permissions
 
-For S3 output, the EC2 instance/ECS task also needs S3 permissions:
+Add S3 permissions to the same IAM role:
 
 ```json
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:ListBucket"
-      ],
-      "Resource": [
-        "arn:aws:s3:::your-metrics-bucket",
-        "arn:aws:s3:::your-metrics-bucket/*"
-      ]
-    }
-  ]
+  "Effect": "Allow",
+  "Action": [
+    "s3:PutObject",
+    "s3:GetObject"
+  ],
+  "Resource": "arn:aws:s3:::your-metrics-bucket/*"
 }
 ```
 
@@ -227,34 +189,17 @@ For S3 output, the EC2 instance/ECS task also needs S3 permissions:
 
 ## Troubleshooting
 
-### "PAM authentication failed"
-
-IAM auth not enabled on RDS instance, or user doesn't have `rds_iam` role.
-
-### "Token expired"
-
-IAM tokens are valid for 15 minutes. The collector automatically refreshes them.
-
-### "Access denied"
-
-Check IAM policy resource ARN matches exactly:
-- Correct region
-- Correct account ID
-- Correct DBI resource ID
-- Correct username
-
-### Connection Timeout
-
-- Check security group allows inbound on port 5432
-- Check VPC routing if collector is in different VPC
-- Check RDS is publicly accessible (if connecting from outside VPC)
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| PAM authentication failed | IAM auth not enabled | Enable on RDS instance |
+| Access denied | Policy resource ARN wrong | Verify region, account ID, DBI resource ID |
+| Connection timeout | Security group | Allow inbound port 5432 |
 
 ---
 
 ## Security Best Practices
 
-1. **Use VPC endpoints** for S3 to keep traffic private
-2. **Restrict IAM policy** to specific database resource
+1. **Use VPC endpoints** for S3
+2. **Restrict IAM policy** to specific database
 3. **Enable CloudTrail** for audit logging
 4. **Use reader endpoint** for Aurora clusters
-5. **Set up alarms** for failed authentication attempts

@@ -7,7 +7,6 @@ Get PG Collector running in 5 minutes.
 - PostgreSQL 12 or later
 - Linux, macOS, or Windows
 - Network access to your PostgreSQL instance
-- (Optional) S3 bucket for metrics storage
 
 ## Step 1: Install
 
@@ -28,18 +27,14 @@ sudo mv pg-collector /usr/local/bin/
 
 ## Step 2: Create PostgreSQL User
 
-Connect to your PostgreSQL database and create a monitoring user:
+Connect to your PostgreSQL database:
 
 ```sql
--- Create the user (no password - will use certificate auth)
+-- Create monitoring user
 CREATE USER pgcollector;
 
--- Grant necessary permissions
+-- Grant monitoring permissions
 GRANT pg_monitor TO pgcollector;
-GRANT USAGE ON SCHEMA public TO pgcollector;
-
--- For pg_stat_statements (if using)
-GRANT EXECUTE ON FUNCTION pg_stat_statements_reset(oid, oid, bigint) TO pgcollector;
 ```
 
 ## Step 3: Configure
@@ -48,11 +43,14 @@ Create the configuration file:
 
 ```bash
 sudo mkdir -p /etc/pg-collector
-sudo tee /etc/pg-collector/config.yaml << 'EOF'
+sudo vi /etc/pg-collector/config.yaml
+```
+
+Minimal configuration:
+
+```yaml
 customer_id: "your_customer_id"
 database_id: "your_database_id"
-tenant_tier: "starter"
-output_mode: "s3_only"
 
 postgres:
   conn_string: "postgres://pgcollector@localhost:5432/postgres?sslmode=verify-full"
@@ -63,29 +61,25 @@ postgres:
     cert_file: /etc/pg-collector/certs/client.crt
     key_file: /etc/pg-collector/certs/client.key
 
-s3:
-  enabled: true
+output:
+  type: s3
   region: "us-east-1"
   bucket: "your-metrics-bucket"
-  batch_interval: 5m
-  format: "parquet"
-EOF
 ```
 
 ## Step 4: Set Up Certificates
 
-See [Security Guide](security.md) for detailed mTLS setup. Quick version:
+See [Security Guide](security.md) for detailed mTLS setup.
 
 ```bash
 sudo mkdir -p /etc/pg-collector/certs
 
 # Copy your certificates
-sudo cp ca.crt /etc/pg-collector/certs/
-sudo cp client.crt /etc/pg-collector/certs/
-sudo cp client.key /etc/pg-collector/certs/
+sudo cp ca.crt client.crt client.key /etc/pg-collector/certs/
 
 # Set permissions
 sudo chmod 600 /etc/pg-collector/certs/*.key
+sudo chmod 644 /etc/pg-collector/certs/*.crt
 ```
 
 ## Step 5: Test Connection
@@ -96,11 +90,9 @@ pg-collector --config /etc/pg-collector/config.yaml --test
 
 Expected output:
 ```
-[INFO] Testing PostgreSQL connection...
-[INFO] Connected successfully
-[INFO] Testing S3 connection...
-[INFO] S3 bucket accessible
-[INFO] All tests passed
+Testing PostgreSQL connection... OK
+Testing output destination... OK
+All tests passed
 ```
 
 ## Step 6: Run
@@ -111,17 +103,16 @@ Expected output:
 pg-collector --config /etc/pg-collector/config.yaml
 ```
 
-### Background (systemd)
+### As a Service (production)
 
 ```bash
 sudo systemctl enable pg-collector
 sudo systemctl start pg-collector
-sudo systemctl status pg-collector
 ```
 
 ## Step 7: Verify
 
-Check the health endpoint:
+Check health:
 
 ```bash
 curl http://localhost:8080/health
@@ -135,12 +126,12 @@ sudo journalctl -u pg-collector -f
 
 ## Next Steps
 
-- [Configuration Guide](configuration.md) - All configuration options
-- [Security Guide](security.md) - Certificate setup and hardening
+- [Configuration Guide](configuration.md) - All options
+- [Security Guide](security.md) - Certificate setup
 - [Troubleshooting](troubleshooting.md) - Common issues
 
-## Having Issues?
+## Need Help?
 
-- Check [Troubleshooting Guide](troubleshooting.md)
-- Open an [issue](https://github.com/burnside-project/pg-collector/issues)
-- Contact support@burnsideproject.ai
+- [Troubleshooting Guide](troubleshooting.md)
+- [GitHub Issues](https://github.com/burnside-project/pg-collector/issues)
+- Email: support@burnsideproject.ai

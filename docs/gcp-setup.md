@@ -4,7 +4,7 @@ Deploy PG Collector with Google Cloud SQL using IAM authentication.
 
 ## Overview
 
-Cloud SQL IAM authentication allows passwordless connections using Google service accounts or user identities.
+Cloud SQL IAM authentication allows passwordless connections using Google service accounts.
 
 **Benefits:**
 - No password management
@@ -47,13 +47,13 @@ gcloud sql instances patch INSTANCE_NAME \
 gcloud iam service-accounts create pg-collector \
   --display-name="PG Collector Service Account"
 
-# Get the service account email
+# Note the email
 SA_EMAIL="pg-collector@PROJECT_ID.iam.gserviceaccount.com"
 ```
 
 ---
 
-## Step 3: Grant Cloud SQL Permissions
+## Step 3: Grant Permissions
 
 ```bash
 # Grant Cloud SQL Client role
@@ -71,18 +71,17 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 
 ## Step 4: Create Database User
 
-Connect to your Cloud SQL instance and create the IAM user:
+Connect to your Cloud SQL instance:
 
 ```sql
--- Create IAM user (email without @domain for Cloud SQL)
+-- Create IAM user
 CREATE USER "pg-collector@PROJECT_ID.iam" WITH LOGIN;
 
 -- Grant monitoring permissions
 GRANT pg_monitor TO "pg-collector@PROJECT_ID.iam";
-GRANT USAGE ON SCHEMA public TO "pg-collector@PROJECT_ID.iam";
 ```
 
-**Important:** The PostgreSQL username must match the service account email, but with `.iam` suffix and using the truncated format.
+**Note:** Username format must include `.iam` suffix.
 
 ---
 
@@ -90,19 +89,8 @@ GRANT USAGE ON SCHEMA public TO "pg-collector@PROJECT_ID.iam";
 
 ### GCE (Compute Engine)
 
-Attach the service account to your VM:
-
 ```bash
 gcloud compute instances create pg-collector-vm \
-  --service-account=${SA_EMAIL} \
-  --scopes=https://www.googleapis.com/auth/cloud-platform \
-  --zone=us-central1-a
-```
-
-Or update existing instance:
-
-```bash
-gcloud compute instances set-service-account INSTANCE_NAME \
   --service-account=${SA_EMAIL} \
   --scopes=https://www.googleapis.com/auth/cloud-platform
 ```
@@ -120,44 +108,28 @@ metadata:
     iam.gke.io/gcp-service-account: pg-collector@PROJECT_ID.iam.gserviceaccount.com
 ```
 
-### Cloud Run
-
-Deploy with service account:
-
-```bash
-gcloud run deploy pg-collector \
-  --service-account=${SA_EMAIL} \
-  --image=ghcr.io/burnside-project/pg-collector:latest
-```
-
 ---
 
 ## Step 6: Configure PG Collector
 
-### Using Cloud SQL Proxy (Recommended)
+### With Cloud SQL Proxy (Recommended)
 
 ```yaml
-customer_id: "cust_your_id"
+customer_id: "your_customer_id"
 database_id: "db_cloudsql_prod"
-tenant_tier: "starter"
-output_mode: "s3_only"  # or use GCS
 
 postgres:
-  # Connect via Cloud SQL Proxy socket
   conn_string: "postgres://pg-collector@PROJECT_ID.iam@/postgres?host=/cloudsql/PROJECT_ID:REGION:INSTANCE_NAME"
   auth_method: gcp_iam
   gcp_iam:
     enabled: true
 
-# For GCS output instead of S3
-gcs:
-  enabled: true
+output:
+  type: gcs
   bucket: "your-metrics-bucket"
-  batch_interval: 5m
-  format: "parquet"
 ```
 
-### Direct Connection (Public IP)
+### Direct Connection
 
 ```yaml
 postgres:
@@ -174,39 +146,15 @@ postgres:
 
 ## Step 7: Install Cloud SQL Proxy
 
-If using proxy connection:
-
 ```bash
-# Download Cloud SQL Proxy
+# Download
 curl -o /usr/local/bin/cloud-sql-proxy \
   https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.8.0/cloud-sql-proxy.linux.amd64
 
 chmod +x /usr/local/bin/cloud-sql-proxy
 
-# Run proxy
+# Run
 cloud-sql-proxy PROJECT_ID:REGION:INSTANCE_NAME &
-```
-
-Or as systemd service:
-
-```bash
-sudo tee /etc/systemd/system/cloud-sql-proxy.service << 'EOF'
-[Unit]
-Description=Cloud SQL Proxy
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/cloud-sql-proxy PROJECT_ID:REGION:INSTANCE_NAME
-Restart=always
-User=cloudsql
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl enable cloud-sql-proxy
-sudo systemctl start cloud-sql-proxy
 ```
 
 ---
@@ -219,21 +167,7 @@ pg-collector --config /etc/pg-collector/config.yaml --test
 
 ---
 
-## GCS Output Configuration
-
-For Google Cloud Storage output:
-
-```yaml
-gcs:
-  enabled: true
-  bucket: "your-metrics-bucket"
-  key_prefix: "metrics"
-  batch_interval: 5m
-  format: "parquet"
-  compression: "gzip"
-```
-
-Grant storage permissions:
+## GCS Output Permissions
 
 ```bash
 gcloud projects add-iam-policy-binding PROJECT_ID \
@@ -245,27 +179,11 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 
 ## Troubleshooting
 
-### "FATAL: password authentication failed"
-
-- IAM auth not enabled on Cloud SQL
-- Username format incorrect (must include `.iam` suffix)
-- Service account doesn't have `cloudsql.instanceUser` role
-
-### "Permission denied"
-
-- Service account missing `cloudsql.client` role
-- Workload Identity not configured correctly (GKE)
-
-### Connection Refused
-
-- Cloud SQL Proxy not running
-- Private IP connectivity issue
-- Firewall rules blocking connection
-
-### Token Errors
-
-- Application Default Credentials not set
-- Service account key expired (if using key file)
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Password authentication failed | IAM auth not enabled | Enable on Cloud SQL |
+| Permission denied | Missing IAM role | Add `cloudsql.instanceUser` role |
+| Connection refused | Proxy not running | Start Cloud SQL Proxy |
 
 ---
 
@@ -274,6 +192,4 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 1. **Use Cloud SQL Proxy** instead of public IP
 2. **Enable private IP** for Cloud SQL
 3. **Use Workload Identity** on GKE
-4. **Enable Cloud Audit Logs** for database access
-5. **Restrict service account permissions** to minimum required
-6. **Use VPC Service Controls** for additional security
+4. **Enable Cloud Audit Logs**
