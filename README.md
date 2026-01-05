@@ -51,18 +51,21 @@ curl -sSL https://raw.githubusercontent.com/burnside-project/pg-collector/main/s
 
 ## Manual Download
 
-| Platform | Architecture | Download |
-|----------|--------------|----------|
-| **Linux** | x86_64 (amd64) | [pg-collector-linux-amd64.tar.gz](https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-amd64.tar.gz) |
-| **Linux** | ARM64 | [pg-collector-linux-arm64.tar.gz](https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-arm64.tar.gz) |
-| **macOS** | Intel (x86_64) | [pg-collector-darwin-amd64.tar.gz](https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-amd64.tar.gz) |
-| **macOS** | Apple Silicon | [pg-collector-darwin-arm64.tar.gz](https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-arm64.tar.gz) |
-| **Windows** | x86_64 | [pg-collector-windows-amd64.zip](https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-windows-amd64.zip) |
+Download the latest release from the [Releases page](https://github.com/burnside-project/pg-collector/releases).
+
+| Platform | Architecture | File |
+|----------|--------------|------|
+| **Linux** | x86_64 (amd64) | `pg-collector-linux-amd64.tar.gz` |
+| **Linux** | ARM64 | `pg-collector-linux-arm64.tar.gz` |
+| **macOS** | Intel (x86_64) | `pg-collector-darwin-amd64.tar.gz` |
+| **macOS** | Apple Silicon | `pg-collector-darwin-arm64.tar.gz` |
+| **Windows** | x86_64 | `pg-collector-windows-amd64.zip` |
 
 ### Verify Download
 
+Each release includes a `checksums.txt` file. After downloading:
+
 ```bash
-curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/checksums.txt
 sha256sum -c checksums.txt --ignore-missing
 ```
 
