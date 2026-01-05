@@ -168,8 +168,10 @@ curl http://localhost:8080/metrics
 | [Security](docs/security.md) | mTLS setup, certificate management |
 | [AWS Setup](docs/aws-setup.md) | RDS, Aurora deployment |
 | [GCP Setup](docs/gcp-setup.md) | Cloud SQL deployment |
+| [Monitoring](docs/monitoring.md) | Health checks, Prometheus metrics |
 | [CLI Reference](docs/cli-reference.md) | Command-line options |
 | [Troubleshooting](docs/troubleshooting.md) | Common issues and solutions |
+| [FAQ](docs/faq.md) | Frequently asked questions |
 
 ---
 
