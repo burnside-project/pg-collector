@@ -159,6 +159,70 @@ sha256sum -c checksums.txt --ignore-missing
 
 ---
 
+## Demo Build Installation
+
+For quick evaluation without certificate setup, use the demo build which allows password authentication.
+
+### Download Demo Build
+
+| Platform | Download |
+|----------|----------|
+| Linux amd64 | `pg-collector-linux-amd64-demo.tar.gz` |
+| Linux arm64 | `pg-collector-linux-arm64-demo.tar.gz` |
+| macOS Intel | `pg-collector-darwin-amd64-demo.tar.gz` |
+| macOS Apple Silicon | `pg-collector-darwin-arm64-demo.tar.gz` |
+
+```bash
+# Example: Linux amd64
+curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-amd64-demo.tar.gz
+tar -xzf pg-collector-linux-amd64-demo.tar.gz
+
+# macOS Apple Silicon
+curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-arm64-demo.tar.gz
+tar -xzf pg-collector-darwin-arm64-demo.tar.gz
+```
+
+### Demo Configuration
+
+```yaml
+# demo-config.yaml
+customer_id: "demo"
+database_id: "my_db"
+output_mode: local_only
+
+postgres:
+  conn_string: "postgres://user:password@localhost:5432/postgres"
+  auth_method: password  # Only in demo builds
+
+local:
+  enabled: true
+  path: ./output
+  format: jsonl
+  split_by_metric_type: true
+```
+
+### Run Demo
+
+```bash
+./pg-collector-demo --config demo-config.yaml
+```
+
+Metrics are written to the `./output` directory.
+
+### Demo Limitations
+
+| Feature | Demo | Production |
+|---------|------|------------|
+| Password auth | Allowed | Not supported |
+| mTLS/IAM auth | Supported | Required |
+| Local output | Yes | Yes |
+| S3 output | Yes | Yes |
+| Platform output | No | Yes |
+
+For production, use the standard installation with mTLS or IAM authentication.
+
+---
+
 ## Directory Structure
 
 After installation:

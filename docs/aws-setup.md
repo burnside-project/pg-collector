@@ -140,11 +140,6 @@ postgres:
   tls:
     mode: verify-full
     ca_file: /etc/pg-collector/certs/rds-ca-bundle.pem
-
-output:
-  type: s3
-  region: "us-east-1"
-  bucket: "your-metrics-bucket"
 ```
 
 ---
@@ -170,23 +165,6 @@ postgres:
 
 ---
 
-## S3 Output Permissions
-
-Add S3 permissions to the same IAM role:
-
-```json
-{
-  "Effect": "Allow",
-  "Action": [
-    "s3:PutObject",
-    "s3:GetObject"
-  ],
-  "Resource": "arn:aws:s3:::your-metrics-bucket/*"
-}
-```
-
----
-
 ## Troubleshooting
 
 | Issue | Cause | Solution |
@@ -199,7 +177,7 @@ Add S3 permissions to the same IAM role:
 
 ## Security Best Practices
 
-1. **Use VPC endpoints** for S3
+1. **Use private subnets** for collector instances
 2. **Restrict IAM policy** to specific database
 3. **Enable CloudTrail** for audit logging
 4. **Use reader endpoint** for Aurora clusters

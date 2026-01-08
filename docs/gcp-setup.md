@@ -123,10 +123,6 @@ postgres:
   auth_method: gcp_iam
   gcp_iam:
     enabled: true
-
-output:
-  type: gcs
-  bucket: "your-metrics-bucket"
 ```
 
 ### Direct Connection
@@ -163,16 +159,6 @@ cloud-sql-proxy PROJECT_ID:REGION:INSTANCE_NAME &
 
 ```bash
 pg-collector --config /etc/pg-collector/config.yaml --test
-```
-
----
-
-## GCS Output Permissions
-
-```bash
-gcloud projects add-iam-policy-binding PROJECT_ID \
-  --member="serviceAccount:${SA_EMAIL}" \
-  --role="roles/storage.objectCreator"
 ```
 
 ---
