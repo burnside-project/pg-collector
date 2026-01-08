@@ -48,9 +48,8 @@ Response:
     "host": "db.example.com:5432",
     "latency_ms": 2
   },
-  "output": {
-    "type": "s3",
-    "status": "ok",
+  "platform": {
+    "status": "connected",
     "last_upload": "2025-01-04T12:00:00Z"
   },
   "buffer": {
@@ -291,16 +290,16 @@ kubectl logs -f deployment/pg-collector
    pg-collector --config /etc/pg-collector/config.yaml --test
    ```
 
-3. Check output destination accessibility
+3. Check platform connectivity
 
 ### High Buffer Usage
 
-Buffer filling up indicates output issues:
+Buffer filling up indicates connectivity issues:
 
-1. Check output status in `/status`
-2. Verify network connectivity to S3/Kafka
-3. Check IAM permissions
-4. Review output error logs
+1. Check platform status in `/status`
+2. Verify network connectivity to the Burnside platform
+3. Check firewall and network rules
+4. Review error logs
 
 ### Missing Metrics
 

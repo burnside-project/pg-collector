@@ -130,34 +130,6 @@ ERROR: could not get IAM auth token
 
 ---
 
-## Output Issues
-
-### S3 Upload Failed
-
-**Symptoms:**
-```
-ERROR: failed to upload to S3
-ERROR: Access Denied
-```
-
-**Solutions:**
-
-1. **Check IAM permissions include:**
-   - `s3:PutObject`
-   - `s3:GetObject`
-
-2. **Check bucket exists:**
-   ```bash
-   aws s3 ls s3://your-bucket/
-   ```
-
-3. **Test S3 access:**
-   ```bash
-   echo "test" | aws s3 cp - s3://your-bucket/test.txt
-   ```
-
----
-
 ## Service Issues
 
 ### Service Won't Start

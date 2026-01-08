@@ -51,9 +51,7 @@ Testing PostgreSQL connection... OK
   Version: PostgreSQL 15.2
   User: pgcollector
 
-Testing output destination... OK
-  Type: s3
-  Bucket: metrics-bucket
+Testing platform connectivity... OK
 
 All tests passed
 ```
@@ -92,9 +90,8 @@ PostgreSQL:
   Status: connected
   Version: 15.2
 
-Output:
-  Type: s3
-  Status: ok
+Platform:
+  Status: connected
 
 Resources:
   Memory: 45MB / 50MB

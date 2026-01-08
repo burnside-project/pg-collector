@@ -14,7 +14,7 @@ Override with: `pg-collector --config /path/to/config.yaml`
 
 ```yaml
 # =============================================================================
-# IDENTITY
+# IDENTITY (Required)
 # =============================================================================
 
 # Customer identifier (provided during onboarding)
@@ -27,7 +27,7 @@ database_id: "db_prod_01"
 database_name: "Production Database"
 
 # =============================================================================
-# POSTGRESQL CONNECTION
+# POSTGRESQL CONNECTION (Required)
 # =============================================================================
 
 postgres:
@@ -64,33 +64,12 @@ postgres:
     enabled: false
 
 # =============================================================================
-# OUTPUT CONFIGURATION
+# SAMPLING INTERVALS (Optional)
 # =============================================================================
 
-output:
-  # Output type: s3, gcs
-  type: s3
-
-  # AWS S3 settings
-  region: "us-east-1"
-  bucket: "your-metrics-bucket"
-
-  # Batching
-  batch_interval: 5m
-  batch_max_size: 50MB
-
-  # Format: json, parquet
-  format: "parquet"
-
-  # Compression: gzip, zstd, none
-  compression: "gzip"
-
-# =============================================================================
-# SAMPLING INTERVALS
-# =============================================================================
-
+# Adjust based on your subscription tier and monitoring needs
 sampling:
-  # Activity metrics
+  # Activity metrics (sessions, wait events)
   activity: 1s
 
   # Database-level stats
@@ -112,21 +91,21 @@ sampling:
   tables: 60s
 
 # =============================================================================
-# RESOURCE LIMITS
+# RESOURCE LIMITS (Optional)
 # =============================================================================
 
 limits:
-  # Maximum memory for buffering
+  # Maximum memory for buffering (default: 50MB)
   memory_buffer_size: 50MB
 
-  # Maximum disk buffer size
+  # Maximum disk buffer size (default: 500MB)
   disk_buffer_size: 500MB
 
   # Disk buffer location
   disk_buffer_path: /var/lib/pg-collector/buffer.db
 
 # =============================================================================
-# HEALTH ENDPOINTS
+# HEALTH ENDPOINTS (Optional)
 # =============================================================================
 
 health:
@@ -134,7 +113,7 @@ health:
   address: "0.0.0.0:8080"
 
 # =============================================================================
-# LOGGING
+# LOGGING (Optional)
 # =============================================================================
 
 logging:
@@ -199,11 +178,6 @@ postgres:
     ca_file: /etc/pg-collector/certs/ca.crt
     cert_file: /etc/pg-collector/certs/client.crt
     key_file: /etc/pg-collector/certs/client.key
-
-output:
-  type: s3
-  region: "us-east-1"
-  bucket: "metrics-bucket"
 ```
 
 ---
@@ -213,6 +187,9 @@ output:
 ### AWS RDS
 
 ```yaml
+customer_id: "cust_123"
+database_id: "db_rds_prod"
+
 postgres:
   conn_string: "postgres://pgcollector@mydb.xxx.us-east-1.rds.amazonaws.com:5432/postgres?sslmode=verify-full"
   auth_method: aws_iam
@@ -227,6 +204,9 @@ postgres:
 ### GCP Cloud SQL
 
 ```yaml
+customer_id: "cust_123"
+database_id: "db_cloudsql_prod"
+
 postgres:
   conn_string: "postgres://pgcollector@/postgres?host=/cloudsql/project:region:instance"
   auth_method: gcp_iam
@@ -234,30 +214,140 @@ postgres:
     enabled: true
 ```
 
+### Self-Managed PostgreSQL
+
+```yaml
+customer_id: "cust_123"
+database_id: "db_onprem_prod"
+
+postgres:
+  conn_string: "postgres://pgcollector@db.internal:5432/postgres?sslmode=verify-full"
+  auth_method: cert
+  tls:
+    mode: verify-full
+    ca_file: /etc/pg-collector/certs/ca.crt
+    cert_file: /etc/pg-collector/certs/client.crt
+    key_file: /etc/pg-collector/certs/client.key
+```
+
 ---
 
-## Tuning Guide
+## Sampling Interval Guidelines
 
-### High-Frequency Monitoring
+Intervals vary by subscription tier:
 
+| Sampler | Starter | Pro | Enterprise |
+|---------|---------|-----|------------|
+| Activity | 30s | 10s | 1s |
+| Database | 30s | 10s | 10s |
+| Statements | 60s | 30s | 30s |
+| Replication | 30s | 5s | 1s |
+
+Higher-frequency sampling provides more granular insights but generates more data.
+
+---
+
+## Multiple Databases
+
+To monitor multiple databases, run one PG Collector instance per database. Each instance needs:
+- Unique `database_id`
+- Its own configuration file
+- Separate health endpoint port (if on same host)
+
+Example for multiple instances on the same host:
+
+**Instance 1:** `/etc/pg-collector/db1.yaml`
 ```yaml
-sampling:
-  activity: 500ms
-  replication: 500ms
+customer_id: "cust_123"
+database_id: "db_prod_01"
+health:
+  address: "0.0.0.0:8080"
+postgres:
+  conn_string: "postgres://pgcollector@db1.internal:5432/postgres"
+  # ...
 ```
 
-### Low-Resource Environment
+**Instance 2:** `/etc/pg-collector/db2.yaml`
+```yaml
+customer_id: "cust_123"
+database_id: "db_prod_02"
+health:
+  address: "0.0.0.0:8081"
+postgres:
+  conn_string: "postgres://pgcollector@db2.internal:5432/postgres"
+  # ...
+```
+
+---
+
+## Demo Mode Configuration
+
+For quick evaluation without certificate setup, use the demo build.
+
+### Demo Configuration Example
 
 ```yaml
-limits:
-  memory_buffer_size: 25MB
-  disk_buffer_size: 100MB
+customer_id: "demo"
+database_id: "my_db"
+output_mode: local_only
 
-sampling:
-  activity: 5s
-  database: 30s
-  statements: 60s
+postgres:
+  conn_string: "postgres://user:password@localhost:5432/postgres"
+  auth_method: password  # Only in demo builds
+
+local:
+  enabled: true
+  path: ./output
+  format: jsonl
+  split_by_metric_type: true
 ```
+
+### Demo Output Options
+
+| Output Mode | Description |
+|-------------|-------------|
+| `local_only` | Write metrics to local filesystem |
+| `s3_only` | Write metrics to S3-compatible storage |
+
+### Local Output Configuration
+
+```yaml
+local:
+  enabled: true
+  path: ./output              # Output directory
+  format: jsonl               # jsonl or parquet
+  rotate_interval: 1h         # File rotation interval
+  max_file_size: 100MB        # Max file size before rotation
+  flush_interval: 10s         # Buffer flush interval
+  split_by_metric_type: true  # Separate files per metric type
+```
+
+### S3 Output Configuration (Demo)
+
+```yaml
+output_mode: s3_only
+
+s3:
+  enabled: true
+  region: "us-east-1"
+  bucket: "your-bucket-name"
+  key_prefix: "pg-collector"
+  format: parquet            # parquet or json
+  batch_interval: 5m
+  batch_max_size: 50MB
+```
+
+### Demo Limitations
+
+| Feature | Demo | Production |
+|---------|------|------------|
+| Password auth | Allowed | Not supported |
+| mTLS/IAM auth | Supported | Required |
+| Local output | Yes | Yes |
+| S3 output | Yes | Yes |
+| Platform output | No | Yes |
+
+For production deployments, use the standard build with mTLS or IAM authentication.
 
 ---
 
@@ -266,3 +356,4 @@ sampling:
 - [Security Guide](security.md) - TLS and authentication
 - [AWS Setup](aws-setup.md) - RDS configuration
 - [GCP Setup](gcp-setup.md) - Cloud SQL configuration
+- [Troubleshooting](troubleshooting.md) - Common issues

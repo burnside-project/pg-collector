@@ -10,7 +10,20 @@ PG Collector is designed with security as a core principle. This guide covers au
 | **AWS IAM** | Amazon RDS, Aurora | High |
 | **GCP IAM** | Google Cloud SQL | High |
 
-**Note:** Password authentication is not supported. This is intentional - passwords in configuration files are a security risk.
+**Note:** Password authentication is not supported in production builds. This is intentional - passwords in configuration files are a security risk.
+
+### Demo Mode Exception
+
+For quick evaluation, the **demo build** (`pg-collector-demo`) allows password authentication:
+
+```yaml
+# Only in demo builds
+postgres:
+  conn_string: "postgres://user:password@localhost:5432/postgres"
+  auth_method: password
+```
+
+Demo builds are for evaluation only. For production, always use mTLS or IAM authentication.
 
 ---
 
