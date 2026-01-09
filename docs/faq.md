@@ -1,5 +1,9 @@
 # Frequently Asked Questions
 
+Quick answers to common questions.
+
+---
+
 ## General
 
 ### What PostgreSQL versions are supported?
@@ -8,11 +12,11 @@ PostgreSQL 12 and later. Some features (like certain pg_stat views) require newe
 
 ### Does PG Collector impact database performance?
 
-PG Collector is designed to have minimal impact:
-- Uses only read-only queries
-- Queries have timeout protection
-- Connection usage is minimal
-- Automatic backoff on errors
+**No.** PG Collector is designed from the ground up for zero database impact:
+- Read-only queries with timeout protection
+- Maximum 2 database connections
+- Automatic backoff when your database is busy
+- No locks, no writes, no schema changes
 
 ### What platforms are supported?
 
@@ -48,9 +52,11 @@ Default location: `/var/lib/pg-collector/buffer.db`
 
 ## Authentication
 
-### Why isn't password authentication supported?
+### Why isn't password authentication supported in production?
 
-Storing passwords in configuration files is a security risk. Certificate and IAM authentication provide better security without password management.
+**Security first.** Storing passwords in configuration files creates unnecessary risk. Certificate and IAM authentication eliminate password management entirely—no rotation, no exposure in logs, no secrets to protect.
+
+*Note: Password auth is available in [demo builds](quick-start.md#demo-mode-quick-evaluation) for evaluation purposes.*
 
 ### Can I use AWS IAM with self-managed PostgreSQL?
 
@@ -175,12 +181,16 @@ This provides read-only access to monitoring views.
 
 ### Where do I report bugs?
 
-[GitHub Issues](https://github.com/burnside-project/pg-collector/issues)
+[GitHub Issues](https://github.com/burnside-project/pg-collector/issues) — We actively monitor and respond.
 
 ### How do I get commercial support?
 
-Contact: support@burnsideproject.ai
+Email [support@burnsideproject.ai](mailto:support@burnsideproject.ai) — Pro and Enterprise customers get priority response.
 
-### Where is the documentation?
+### I have a feature request
 
-You're reading it! Also available at: https://github.com/burnside-project/pg-collector/docs/
+We'd love to hear it! Open a [GitHub Issue](https://github.com/burnside-project/pg-collector/issues) with the "enhancement" label, or email us directly.
+
+### Where is the full documentation?
+
+You're reading it! Also available at [github.com/burnside-project/pg-collector/docs](https://github.com/burnside-project/pg-collector/docs/)

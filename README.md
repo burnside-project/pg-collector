@@ -1,7 +1,10 @@
 <p align="center">
   <h1 align="center">PG Collector</h1>
   <p align="center">
-    <strong>PostgreSQL Metrics Collector for Predictive Analytics</strong>
+    <strong>Know what's happening. Predict what's next.</strong>
+  </p>
+  <p align="center">
+    <em>Real-time PostgreSQL observability for confident decision-making</em>
   </p>
 </p>
 
@@ -24,14 +27,19 @@
 
 ## Overview
 
-PG Collector is a lightweight, high-performance PostgreSQL metrics collector designed for predictive database analytics. It runs as a single binary with zero external dependencies, collecting comprehensive database metrics and streaming them securely to the Burnside analytics platform.
+Stop reacting to database issues—start predicting them. PG Collector transforms raw PostgreSQL metrics into actionable insights, giving your team the confidence to act before problems become outages.
 
-**Key Benefits:**
-- **Zero Impact** - Designed to never affect database performance
-- **Never Lose Data** - Resilient buffering protects against network interruptions
-- **Secure by Default** - mTLS authentication, no passwords stored
-- **Cloud Native** - Works with RDS, Aurora, Cloud SQL, and self-managed PostgreSQL
-- **Simple Setup** - Configure your database connection, we handle the rest
+**A single binary. Zero dependencies. 5-minute setup.**
+
+**Why Teams Choose PG Collector:**
+
+| | |
+|---|---|
+| **Act Before Problems Hit** | Real-time metrics feed predictive analytics that identify issues before they impact users |
+| **Zero Database Impact** | Designed from the ground up to never affect your database performance |
+| **No DBA Required** | Clear insights without needing to interpret pg_stat views yourself |
+| **Works Everywhere** | RDS, Aurora, Cloud SQL, or self-managed—we've got you covered |
+| **Never Lose Data** | Resilient buffering survives network hiccups without dropping metrics |
 
 ---
 
@@ -73,49 +81,51 @@ sha256sum -c checksums.txt --ignore-missing
 
 ---
 
-## Subscription Tiers
+## Choose Your Plan
 
-PG Collector is available in three subscription tiers:
+**Start small, scale as you grow.** All plans include predictive analytics and alerting.
 
-| Feature | Starter | Pro | Enterprise |
-|---------|:-------:|:---:|:----------:|
+| | **Starter** | **Pro** | **Enterprise** |
+|---|:---:|:---:|:---:|
 | **Databases** | 1 | Up to 10 | Unlimited |
-| **Activity Monitoring** | 30s intervals | 10s intervals | Real-time (1s) |
-| **Statement Analytics** | Top 50 | Top 500 | Unlimited |
+| **Insight Latency** | Daily digest | 5-minute alerts | Real-time (<1 min) |
+| **Statement Analytics** | Top 50 queries | Top 500 queries | Unlimited |
 | **Data Retention** | 7 days | 30 days | 90 days |
 | **Query Masking** | Basic | Full | Custom rules |
-| **Support** | Community | Email | Priority |
+| **Support** | Community | Email | Priority + SLA |
 
-Contact [sales@burnsideproject.ai](mailto:sales@burnsideproject.ai) for pricing and enterprise features.
+**Ready to get started?** [Book a demo](mailto:sales@burnsideproject.ai) or [try the free evaluation](#demo-mode-quick-evaluation).
 
 ---
 
 ## Features
 
-### Metrics Collected
+### What We Capture
 
-| Category | Description | Frequency |
-|----------|-------------|-----------|
-| **Activity** | Active sessions, wait events, query states | Real-time |
-| **Performance** | Query statistics, I/O patterns, cache efficiency | Periodic |
-| **Replication** | Lag, slot status, streaming state | Real-time |
-| **Storage** | Table/index sizes, bloat indicators | Periodic |
-| **Background** | Vacuum progress, checkpoint activity | Periodic |
+| Category | What You Learn | How Fast |
+|----------|----------------|----------|
+| **Activity** | Which queries are running, waiting, or blocked | Real-time |
+| **Performance** | Slow queries, cache misses, I/O bottlenecks | Continuous |
+| **Replication** | Lag alerts before replicas fall behind | Real-time |
+| **Storage** | Table bloat and growth trends | Periodic |
+| **Background** | Vacuum health and checkpoint pressure | Periodic |
 
-### Resource Guarantees
+### Built for Production
 
-- **Memory:** Configurable ceiling with automatic management
-- **Disk:** Local buffering during network interruptions
-- **Connections:** Minimal PostgreSQL connection usage (max 2)
-- **Queries:** Timeout protection prevents blocking
+| Guarantee | What It Means |
+|-----------|---------------|
+| **Memory Safe** | Configurable ceiling with automatic management—never runaway |
+| **Network Resilient** | Local buffering survives outages—zero data loss |
+| **Minimal Footprint** | Max 2 PostgreSQL connections, timeout-protected queries |
+| **Secure by Default** | mTLS or IAM auth—no passwords in config files |
 
-### Authentication Methods
+### Connect Your Way
 
-| Method | Use Case | Documentation |
-|--------|----------|---------------|
-| **mTLS (Certificate)** | Self-managed PostgreSQL (recommended) | [Security Guide](docs/security.md) |
-| **AWS IAM** | Amazon RDS, Aurora | [AWS Setup](docs/aws-setup.md) |
-| **GCP IAM** | Google Cloud SQL | [GCP Setup](docs/gcp-setup.md) |
+| Method | Best For | Guide |
+|--------|----------|-------|
+| **mTLS Certificates** | Self-managed PostgreSQL (most secure) | [Security Guide](docs/security.md) |
+| **AWS IAM** | RDS, Aurora (passwordless) | [AWS Setup](docs/aws-setup.md) |
+| **GCP IAM** | Cloud SQL (passwordless) | [GCP Setup](docs/gcp-setup.md) |
 
 ---
 
@@ -181,19 +191,21 @@ curl http://localhost:8080/metrics
 
 ## How It Works
 
+**From install to insight in under 5 minutes.**
+
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Your Database  │────▶│   PG Collector  │────▶│    Burnside     │
-│   (PostgreSQL)  │     │   (Your Host)   │     │    Platform     │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-        │                       │                       │
-    You manage            You configure          We manage
-   the database          the connection        the analytics
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  Your Database  │────▶│   PG Collector  │────▶│    Burnside     │────▶│   Your Team     │
+│   (PostgreSQL)  │     │   (Your Host)   │     │    Platform     │     │   (Insights)    │
+└─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘
+        │                       │                       │                       │
+    You manage            5-min setup             We analyze           You decide
+   the database           one config file      predict & alert      with confidence
 ```
 
-1. **You configure** the connection to your PostgreSQL database
-2. **PG Collector** securely collects metrics with minimal impact
-3. **Burnside** receives and analyzes the data for predictive insights
+1. **Install** — One command, runs anywhere
+2. **Configure** — Point to your database, we handle the rest
+3. **Insights** — Predictive analytics identify issues before they escalate
 
 ---
 
@@ -232,5 +244,6 @@ Licensed under the Apache License, Version 2.0 with Additional Terms. See [LICEN
 ---
 
 <p align="center">
-  <sub>Built for database reliability</sub>
+  <strong>Stop reacting. Start predicting.</strong><br>
+  <sub>Built by the team at <a href="https://burnsideproject.ai">Burnside Project</a></sub>
 </p>

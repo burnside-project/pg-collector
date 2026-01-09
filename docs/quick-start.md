@@ -1,6 +1,8 @@
 # Quick Start Guide
 
-Get PG Collector running in 5 minutes.
+**From zero to insights in 5 minutes.**
+
+Get PG Collector running and start collecting metrics immediately.
 
 ## Prerequisites
 
@@ -132,19 +134,19 @@ sudo journalctl -u pg-collector -f
 
 ## What Happens Next
 
-Once PG Collector is running:
+Once PG Collector is running, you're done with setup. Here's what happens automatically:
 
-1. **Metrics are collected** from your PostgreSQL database
-2. **Data is securely transmitted** to the Burnside platform
-3. **Analytics are available** in your Burnside dashboard
+1. **Metrics flow** — Activity, performance, and health data streams from your database
+2. **Analysis runs** — Burnside's predictive engine identifies patterns and anomalies
+3. **Insights arrive** — Get alerts before problems impact your users
 
-You don't need to configure where data goes - that's handled automatically based on your subscription.
+**That's it.** No dashboards to configure, no queries to write. We handle the analytics so you can focus on your application.
 
 ---
 
 ## Demo Mode (Quick Evaluation)
 
-Get started in 3 steps - no certificates required.
+**Try it now.** Get started in 3 steps—no certificates, no signup, no credit card.
 
 ### Step 1: Download and Extract
 
@@ -193,16 +195,21 @@ GRANT pg_monitor TO your_user;
 ./pg-collector-demo --config demo-config.yaml
 ```
 
-That's it! Metrics are collected and written to `./output/` as JSONL files.
+**That's it!** Metrics stream to `./output/` as JSONL files. You're now collecting PostgreSQL insights.
 
 ```bash
-# View collected data
+# See what's being collected
 ls ./output/
 # activity/  database/  statements/
 
-# See sample metrics
-head ./output/activity/*.jsonl
+# View real-time metrics
+tail -f ./output/activity/*.jsonl
+
+# Check health
+curl http://localhost:8080/health
 ```
+
+**Like what you see?** [Book a demo](mailto:sales@burnsideproject.ai) to unlock predictive analytics and real-time alerting.
 
 ### Troubleshooting
 
@@ -235,6 +242,8 @@ For production, see [Security Guide](security.md) for certificate setup.
 
 ## Need Help?
 
-- [Troubleshooting Guide](troubleshooting.md)
-- [GitHub Issues](https://github.com/burnside-project/pg-collector/issues)
-- Email: support@burnsideproject.ai
+We're here for you:
+
+- [Troubleshooting Guide](troubleshooting.md) — Common issues and solutions
+- [GitHub Issues](https://github.com/burnside-project/pg-collector/issues) — Bug reports and feature requests
+- [support@burnsideproject.ai](mailto:support@burnsideproject.ai) — Direct support from our team

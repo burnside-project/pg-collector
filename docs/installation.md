@@ -1,6 +1,6 @@
 # Installation Guide
 
-Detailed installation instructions for all platforms.
+**Get PG Collector running in minutes.** Detailed installation instructions for all platforms.
 
 ## System Requirements
 
@@ -161,7 +161,7 @@ sha256sum -c checksums.txt --ignore-missing
 
 ## Demo Build Installation
 
-For quick evaluation without certificate setup, use the demo build which allows password authentication.
+**Want to try it first?** The demo build lets you evaluate PG Collector without certificate setup—just point it at your database and go.
 
 ### Download Demo Build
 

@@ -1,6 +1,8 @@
 # Monitoring Guide
 
-Monitor PG Collector health and performance.
+**Keep an eye on the collector that keeps an eye on your database.**
+
+Monitor PG Collector health and performance with built-in endpoints and Prometheus integration.
 
 ## Health Endpoints
 
