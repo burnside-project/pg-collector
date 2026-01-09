@@ -144,143 +144,74 @@ You don't need to configure where data goes - that's handled automatically based
 
 ## Demo Mode (Quick Evaluation)
 
-For quick evaluation without certificate setup, use the demo build.
+Get started in 3 steps - no certificates required.
 
-### Step 1: Download Demo Build
+### Step 1: Download and Extract
 
 ```bash
 # Linux (amd64)
 curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-amd64-demo.tar.gz
 tar -xzf pg-collector-linux-amd64-demo.tar.gz
 
-# Linux (arm64)
-curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-arm64-demo.tar.gz
-tar -xzf pg-collector-linux-arm64-demo.tar.gz
-
-# macOS Intel
-curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-amd64-demo.tar.gz
-tar -xzf pg-collector-darwin-amd64-demo.tar.gz
-
 # macOS Apple Silicon
 curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-arm64-demo.tar.gz
 tar -xzf pg-collector-darwin-arm64-demo.tar.gz
 ```
 
-Verify the download:
+The tarball contains:
+- `pg-collector-demo` - the binary
+- `demo-config.yaml` - configuration template
+- `README.txt` - quick reference
 
-```bash
-./pg-collector-demo --version
-# Output: pg-collector vX.X.X (commit: ..., built: ..., mode: demo)
-```
+### Step 2: Edit Configuration
 
-### Step 2: Create PostgreSQL User
-
-Connect to your PostgreSQL database as a superuser:
-
-```bash
-# Local PostgreSQL
-psql -U postgres
-
-# macOS Homebrew PostgreSQL
-psql postgres
-
-# Docker PostgreSQL
-docker exec -it <container> psql -U postgres
-```
-
-Create a monitoring user with password:
-
-```sql
--- Create user with password (for demo mode)
-CREATE USER pgcollector WITH PASSWORD 'collector_password';
-
--- Grant monitoring permissions
-GRANT pg_monitor TO pgcollector;
-
--- Verify the user was created
-\du pgcollector
-```
-
-### Step 3: Test Database Connection
-
-Before running the collector, verify you can connect:
-
-```bash
-# Test connection with password
-psql "postgres://pgcollector:collector_password@localhost:5432/postgres?sslmode=disable"
-
-# You should see: postgres=>
-# Type \q to exit
-```
-
-**Common connection issues:**
-
-| Error | Solution |
-|-------|----------|
-| `FATAL: password authentication failed` | Check password in connection string |
-| `FATAL: no pg_hba.conf entry` | Add `host all pgcollector 127.0.0.1/32 md5` to pg_hba.conf |
-| `connection refused` | Check PostgreSQL is running on port 5432 |
-| `SSL required` | Add `?sslmode=disable` to connection string for local testing |
-
-### Step 4: Create Configuration File
-
-Create `demo-config.yaml`:
+Open `demo-config.yaml` and update the connection string with your PostgreSQL credentials:
 
 ```yaml
-# demo-config.yaml
-customer_id: "demo"
-database_id: "my_local_db"
-
-output_mode: local_only
-
 postgres:
-  # Format: postgres://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=disable
-  conn_string: "postgres://pgcollector:collector_password@localhost:5432/postgres?sslmode=disable"
-  auth_method: password  # Only allowed in demo builds
-
-local:
-  enabled: true
-  path: ./output
-  format: jsonl
-  split_by_metric_type: true
+  # Change this line to match your database:
+  conn_string: "postgres://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=disable"
+  auth_method: password
 ```
 
-**Connection string format:**
+**Examples:**
 
+| Setup | Connection String |
+|-------|------------------|
+| Local PostgreSQL | `postgres://postgres:mypass@localhost:5432/postgres?sslmode=disable` |
+| Docker container | `postgres://postgres:mypass@172.17.0.1:5432/postgres?sslmode=disable` |
+| Remote server | `postgres://myuser:mypass@db.example.com:5432/mydb?sslmode=require` |
+
+**Note:** Your PostgreSQL user needs the `pg_monitor` role for full metrics:
+```sql
+GRANT pg_monitor TO your_user;
 ```
-postgres://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=MODE
 
-Examples:
-  localhost:        postgres://pgcollector:pass@localhost:5432/postgres?sslmode=disable
-  Docker (Linux):   postgres://pgcollector:pass@172.17.0.1:5432/postgres?sslmode=disable
-  Docker (macOS):   postgres://pgcollector:pass@docker.for.mac.localhost:5432/postgres?sslmode=disable
-  Remote:           postgres://pgcollector:pass@db.example.com:5432/mydb?sslmode=require
-```
-
-### Step 5: Run Demo
+### Step 3: Run
 
 ```bash
 ./pg-collector-demo --config demo-config.yaml
 ```
 
-You should see output like:
-
-```json
-{"level":"info","msg":"starting pg-collector","version":"v0.2.0","mode":"demo"}
-{"level":"info","msg":"connected to PostgreSQL databases","database_count":1}
-{"level":"info","msg":"created local filesystem producer","path":"./output"}
-{"level":"info","msg":"pg-collector started successfully"}
-```
-
-Metrics are written to the `./output` directory in JSONL format:
+That's it! Metrics are collected and written to `./output/` as JSONL files.
 
 ```bash
+# View collected data
 ls ./output/
-# activity/  database/  bgwriter/  ...
+# activity/  database/  statements/
 
-# View collected metrics
+# See sample metrics
 head ./output/activity/*.jsonl
 ```
+
+### Troubleshooting
+
+| Error | Solution |
+|-------|----------|
+| `password authentication failed` | Check username/password in conn_string |
+| `no pg_hba.conf entry` | Add `host all all 127.0.0.1/32 md5` to pg_hba.conf |
+| `connection refused` | Verify PostgreSQL is running: `pg_isready` |
+| `SSL required` | Add `?sslmode=disable` to connection string |
 
 ### Demo Limitations
 
