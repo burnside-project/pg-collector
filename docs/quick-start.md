@@ -180,13 +180,20 @@ local:
   split_by_metric_type: true
 ```
 
+### Verify Demo Build
+
+```bash
+./pg-collector-demo --version
+# Output: pg-collector vX.X.X (commit: ..., built: ..., mode: demo)
+```
+
 ### Run Demo
 
 ```bash
 ./pg-collector-demo --config demo-config.yaml
 ```
 
-Metrics are written to the `./output` directory.
+Metrics are written to the `./output` directory in JSONL format.
 
 ### Demo Limitations
 

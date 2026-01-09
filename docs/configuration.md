@@ -221,7 +221,7 @@ customer_id: "cust_123"
 database_id: "db_onprem_prod"
 
 postgres:
-  conn_string: "postgres://pgcollector@db.internal:5432/postgres?sslmode=verify-full"
+  conn_string: "postgres://pgcollector@db.example.com:5432/postgres?sslmode=verify-full"
   auth_method: cert
   tls:
     mode: verify-full
@@ -263,7 +263,7 @@ database_id: "db_prod_01"
 health:
   address: "0.0.0.0:8080"
 postgres:
-  conn_string: "postgres://pgcollector@db1.internal:5432/postgres"
+  conn_string: "postgres://pgcollector@db1.example.com:5432/postgres"
   # ...
 ```
 
@@ -274,7 +274,7 @@ database_id: "db_prod_02"
 health:
   address: "0.0.0.0:8081"
 postgres:
-  conn_string: "postgres://pgcollector@db2.internal:5432/postgres"
+  conn_string: "postgres://pgcollector@db2.example.com:5432/postgres"
   # ...
 ```
 
