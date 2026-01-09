@@ -144,34 +144,99 @@ You don't need to configure where data goes - that's handled automatically based
 
 ## Demo Mode (Quick Evaluation)
 
-For quick evaluation without certificate setup, use the demo build:
+For quick evaluation without certificate setup, use the demo build.
 
-### Download Demo Build
+### Step 1: Download Demo Build
 
 ```bash
 # Linux (amd64)
 curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-amd64-demo.tar.gz
 tar -xzf pg-collector-linux-amd64-demo.tar.gz
 
+# Linux (arm64)
+curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-linux-arm64-demo.tar.gz
+tar -xzf pg-collector-linux-arm64-demo.tar.gz
+
+# macOS Intel
+curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-amd64-demo.tar.gz
+tar -xzf pg-collector-darwin-amd64-demo.tar.gz
+
 # macOS Apple Silicon
 curl -LO https://github.com/burnside-project/pg-collector/releases/latest/download/pg-collector-darwin-arm64-demo.tar.gz
 tar -xzf pg-collector-darwin-arm64-demo.tar.gz
 ```
 
-### Demo Configuration
+Verify the download:
+
+```bash
+./pg-collector-demo --version
+# Output: pg-collector vX.X.X (commit: ..., built: ..., mode: demo)
+```
+
+### Step 2: Create PostgreSQL User
+
+Connect to your PostgreSQL database as a superuser:
+
+```bash
+# Local PostgreSQL
+psql -U postgres
+
+# macOS Homebrew PostgreSQL
+psql postgres
+
+# Docker PostgreSQL
+docker exec -it <container> psql -U postgres
+```
+
+Create a monitoring user with password:
+
+```sql
+-- Create user with password (for demo mode)
+CREATE USER pgcollector WITH PASSWORD 'collector_password';
+
+-- Grant monitoring permissions
+GRANT pg_monitor TO pgcollector;
+
+-- Verify the user was created
+\du pgcollector
+```
+
+### Step 3: Test Database Connection
+
+Before running the collector, verify you can connect:
+
+```bash
+# Test connection with password
+psql "postgres://pgcollector:collector_password@localhost:5432/postgres?sslmode=disable"
+
+# You should see: postgres=>
+# Type \q to exit
+```
+
+**Common connection issues:**
+
+| Error | Solution |
+|-------|----------|
+| `FATAL: password authentication failed` | Check password in connection string |
+| `FATAL: no pg_hba.conf entry` | Add `host all pgcollector 127.0.0.1/32 md5` to pg_hba.conf |
+| `connection refused` | Check PostgreSQL is running on port 5432 |
+| `SSL required` | Add `?sslmode=disable` to connection string for local testing |
+
+### Step 4: Create Configuration File
+
+Create `demo-config.yaml`:
 
 ```yaml
 # demo-config.yaml
 customer_id: "demo"
-database_id: "my_db"
-tenant_tier: "starter"
-api_key: "demo-key"
+database_id: "my_local_db"
 
 output_mode: local_only
 
 postgres:
-  conn_string: "postgres://pgcollector:password@localhost:5432/postgres"
-  auth_method: password  # Only in demo builds
+  # Format: postgres://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=disable
+  conn_string: "postgres://pgcollector:collector_password@localhost:5432/postgres?sslmode=disable"
+  auth_method: password  # Only allowed in demo builds
 
 local:
   enabled: true
@@ -180,20 +245,42 @@ local:
   split_by_metric_type: true
 ```
 
-### Verify Demo Build
+**Connection string format:**
 
-```bash
-./pg-collector-demo --version
-# Output: pg-collector vX.X.X (commit: ..., built: ..., mode: demo)
+```
+postgres://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=MODE
+
+Examples:
+  localhost:        postgres://pgcollector:pass@localhost:5432/postgres?sslmode=disable
+  Docker (Linux):   postgres://pgcollector:pass@172.17.0.1:5432/postgres?sslmode=disable
+  Docker (macOS):   postgres://pgcollector:pass@docker.for.mac.localhost:5432/postgres?sslmode=disable
+  Remote:           postgres://pgcollector:pass@db.example.com:5432/mydb?sslmode=require
 ```
 
-### Run Demo
+### Step 5: Run Demo
 
 ```bash
 ./pg-collector-demo --config demo-config.yaml
 ```
 
-Metrics are written to the `./output` directory in JSONL format.
+You should see output like:
+
+```json
+{"level":"info","msg":"starting pg-collector","version":"v0.2.0","mode":"demo"}
+{"level":"info","msg":"connected to PostgreSQL databases","database_count":1}
+{"level":"info","msg":"created local filesystem producer","path":"./output"}
+{"level":"info","msg":"pg-collector started successfully"}
+```
+
+Metrics are written to the `./output` directory in JSONL format:
+
+```bash
+ls ./output/
+# activity/  database/  bgwriter/  ...
+
+# View collected metrics
+head ./output/activity/*.jsonl
+```
 
 ### Demo Limitations
 
