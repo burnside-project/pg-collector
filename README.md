@@ -1,10 +1,10 @@
 <p align="center">
   <h1 align="center">PG Collector</h1>
   <p align="center">
-    <strong>Know what's happening. Predict what's next.</strong>
+    <strong>From Signals to Prediction</strong>
   </p>
   <p align="center">
-    <em>Real-time PostgreSQL observability for confident decision-making</em>
+    <em>AI-Powered Production Database Prediction for PostgreSQL</em>
   </p>
 </p>
 
@@ -12,32 +12,43 @@
   <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/v/release/burnside-project/pg-collector?style=flat-square" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square" alt="License"></a>
   <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/downloads/burnside-project/pg-collector/total?style=flat-square" alt="Downloads"></a>
+  <img src="https://img.shields.io/badge/AI--Powered-Claude%203.5-blueviolet?style=flat-square" alt="AI Powered">
 </p>
 
 <p align="center">
   <a href="#quick-install">Install</a> |
   <a href="#features">Features</a> |
+  <a href="#ai-powered-prediction">AI Prediction</a> |
   <a href="#subscription-tiers">Tiers</a> |
   <a href="docs/quick-start.md">Quick Start</a> |
-  <a href="docs/configuration.md">Configuration</a> |
-  <a href="docs/security.md">Security</a>
+  <a href="docs/configuration.md">Configuration</a>
 </p>
 
 ---
 
 ## Overview
 
-Stop reacting to database issues—start predicting them. PG Collector transforms raw PostgreSQL metrics into actionable insights, giving your team the confidence to act before problems become outages.
+**Stop reacting to database issues—start predicting them.**
 
-**A single binary. Zero dependencies. 5-minute setup.**
+PG Collector is an AI-powered observability agent that transforms raw PostgreSQL signals into intelligent predictions. Our reasoning engine, powered by Claude 3.5 Sonnet, analyzes your database metrics in real-time to predict issues before they impact your users.
+
+**A single binary. Zero dependencies. 5-minute setup. AI-powered insights.**
+
+```
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│   Signals    │ ───▶ │   Features   │ ───▶ │  AI Engine   │ ───▶ │ Predictions  │
+│ (pg_stat_*)  │      │ (Real-time)  │      │(Claude 3.5)  │      │  & Actions   │
+└──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
+```
 
 **Why Teams Choose PG Collector:**
 
 | | |
 |---|---|
-| **Act Before Problems Hit** | Real-time metrics feed predictive analytics that identify issues before they impact users |
+| **AI-Powered Predictions** | Claude 3.5 Sonnet analyzes patterns and predicts issues before they happen |
+| **From Signals to Action** | Raw metrics become actionable predictions with recommended fixes |
 | **Zero Database Impact** | Designed from the ground up to never affect your database performance |
-| **No DBA Required** | Clear insights without needing to interpret pg_stat views yourself |
+| **No DBA Required** | AI explains complex issues in plain language with specific actions |
 | **Works Everywhere** | RDS, Aurora, Cloud SQL, or self-managed—we've got you covered |
 | **Never Lose Data** | Resilient buffering survives network hiccups without dropping metrics |
 
@@ -95,6 +106,66 @@ sha256sum -c checksums.txt --ignore-missing
 | **Support** | Community | Email | Priority + SLA |
 
 **Ready to get started?** [Book a demo](mailto:sales@burnsideproject.ai) or [try the free evaluation](#demo-mode-quick-evaluation).
+
+---
+
+## AI-Powered Prediction
+
+**The intelligence behind the insights.** Our reasoning engine transforms raw database signals into predictions you can act on.
+
+### How AI Prediction Works
+
+```
+       COLLECT                    ANALYZE                    PREDICT                    ACT
+    ┌───────────┐             ┌───────────┐             ┌───────────┐             ┌───────────┐
+    │ pg_stat_  │             │  Feature  │             │  Claude   │             │  Slack/   │
+    │ activity  │────────────▶│ Engineer- │────────────▶│   3.5     │────────────▶│ PagerDuty │
+    │ database  │   Signals   │   ing     │  Features   │  Sonnet   │ Predictions │  Email    │
+    │ statements│             │           │             │           │             │           │
+    └───────────┘             └───────────┘             └───────────┘             └───────────┘
+```
+
+### What the AI Predicts
+
+| Prediction Type | What It Detects | Lead Time |
+|-----------------|-----------------|-----------|
+| **Connection Exhaustion** | Pool approaching limits based on growth patterns | 15-30 min |
+| **Replication Lag Spike** | Replica falling behind due to write surge | 5-10 min |
+| **Lock Contention** | Blocking chains forming from concurrent transactions | Real-time |
+| **Cache Pressure** | Buffer cache hit ratio degrading | 10-15 min |
+| **Vacuum Emergency** | Tables approaching transaction wraparound | Hours/Days |
+| **Query Degradation** | Execution plans changing, slow query emergence | Minutes |
+
+### AI Output Examples
+
+**Prediction Alert:**
+```json
+{
+  "severity": "warning",
+  "prediction": "Connection pool exhaustion in ~20 minutes",
+  "confidence": 0.87,
+  "evidence": [
+    "Connection count increased 40% in last hour",
+    "Current: 85/100 connections",
+    "Growth rate: 2.3 connections/minute"
+  ],
+  "recommended_actions": [
+    "Scale connection pool to 150",
+    "Enable PgBouncer connection pooling",
+    "Review application connection lifecycle"
+  ]
+}
+```
+
+### AI Capabilities by Tier
+
+| Capability | Starter | Pro | Enterprise |
+|------------|:-------:|:---:|:----------:|
+| Pattern Detection | Daily | 5-min | Real-time |
+| Anomaly Alerts | Basic | Advanced | Custom ML |
+| Root Cause Analysis | - | AI-assisted | Full AI |
+| Predictive Maintenance | - | Standard | Custom |
+| Natural Language Insights | Summary | Detailed | Interactive |
 
 ---
 
@@ -191,21 +262,22 @@ curl http://localhost:8080/metrics
 
 ## How It Works
 
-**From install to insight in under 5 minutes.**
+**From signals to prediction in under 5 minutes.**
 
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Your Database  │────▶│   PG Collector  │────▶│    Burnside     │────▶│   Your Team     │
-│   (PostgreSQL)  │     │   (Your Host)   │     │    Platform     │     │   (Insights)    │
+│  Your Database  │────▶│   PG Collector  │────▶│   AI Engine     │────▶│   Your Team     │
+│   (Signals)     │     │   (Features)    │     │  (Predictions)  │     │   (Actions)     │
 └─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘
         │                       │                       │                       │
-    You manage            5-min setup             We analyze           You decide
-   the database           one config file      predict & alert      with confidence
+   Raw pg_stat_*          Real-time            Claude 3.5 Sonnet        Act before
+     metrics            feature extraction     analyzes & predicts     issues hit users
 ```
 
-1. **Install** — One command, runs anywhere
-2. **Configure** — Point to your database, we handle the rest
-3. **Insights** — Predictive analytics identify issues before they escalate
+1. **Collect Signals** — PG Collector extracts metrics from pg_stat_* views
+2. **Engineer Features** — Real-time transformation into ML-ready features
+3. **AI Prediction** — Claude 3.5 Sonnet analyzes patterns and predicts issues
+4. **Take Action** — Get alerts with recommended fixes before problems escalate
 
 ---
 
@@ -244,6 +316,6 @@ Licensed under the Apache License, Version 2.0 with Additional Terms. See [LICEN
 ---
 
 <p align="center">
-  <strong>Stop reacting. Start predicting.</strong><br>
-  <sub>Built by the team at <a href="https://burnsideproject.ai">Burnside Project</a></sub>
+  <strong>From Signals to Prediction. Stop reacting. Start predicting.</strong><br>
+  <sub>AI-powered database observability by <a href="https://burnsideproject.ai">Burnside Project</a></sub>
 </p>

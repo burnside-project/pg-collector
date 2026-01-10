@@ -244,6 +244,166 @@ After installation:
 
 ---
 
+## Running as a Service
+
+For production deployments, run PG Collector as a system service with **self-healing** capabilities. The service will automatically restart if it crashes and start at system boot.
+
+### Linux (systemd)
+
+```bash
+# Create service file
+sudo cat > /etc/systemd/system/pg-collector.service << 'EOF'
+[Unit]
+Description=PostgreSQL Metrics Collector
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=pg-collector
+Group=pg-collector
+WorkingDirectory=/var/lib/pg-collector
+ExecStart=/usr/local/bin/pg-collector --config /etc/pg-collector/config.yaml
+
+# Self-healing
+Restart=always
+RestartSec=5
+WatchdogSec=60
+
+# Resource limits
+MemoryMax=512M
+CPUQuota=50%
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start
+sudo systemctl daemon-reload
+sudo systemctl enable pg-collector
+sudo systemctl start pg-collector
+
+# Check status
+sudo systemctl status pg-collector
+```
+
+**Self-Healing Features:**
+- `Restart=always` - Automatically restarts on any failure
+- `RestartSec=5` - Waits 5 seconds before restart
+- `WatchdogSec=60` - systemd kills if no heartbeat in 60s
+- `MemoryMax=512M` - Prevents memory leaks from affecting system
+
+### macOS (launchd)
+
+```bash
+# Create launch daemon
+sudo cat > /Library/LaunchDaemons/com.burnsideproject.pg-collector.plist << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.burnsideproject.pg-collector</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/pg-collector</string>
+        <string>--config</string>
+        <string>/etc/pg-collector/config.yaml</string>
+    </array>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>5</integer>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/var/log/pg-collector/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/log/pg-collector/stderr.log</string>
+</dict>
+</plist>
+EOF
+
+# Create directories
+sudo mkdir -p /var/log/pg-collector
+
+# Load and start
+sudo launchctl load /Library/LaunchDaemons/com.burnsideproject.pg-collector.plist
+
+# Check status
+sudo launchctl list | grep pg-collector
+```
+
+**Self-Healing Features:**
+- `KeepAlive=true` - Automatically restarts on any failure
+- `ThrottleInterval=5` - Minimum 5 seconds between restarts
+- `RunAtLoad=true` - Starts at system boot
+
+### Windows (NSSM)
+
+Use [NSSM](https://nssm.cc/) for reliable Windows service management:
+
+```powershell
+# Download NSSM
+Invoke-WebRequest -Uri "https://nssm.cc/release/nssm-2.24.zip" -OutFile "nssm.zip"
+Expand-Archive -Path "nssm.zip" -DestinationPath "C:\Tools"
+
+# Install as service
+C:\Tools\nssm-2.24\win64\nssm.exe install pg-collector "C:\Program Files\pg-collector\pg-collector.exe"
+C:\Tools\nssm-2.24\win64\nssm.exe set pg-collector AppParameters "--config C:\ProgramData\pg-collector\config.yaml"
+
+# Self-healing settings
+C:\Tools\nssm-2.24\win64\nssm.exe set pg-collector AppExit Default Restart
+C:\Tools\nssm-2.24\win64\nssm.exe set pg-collector AppRestartDelay 5000
+
+# Logging
+C:\Tools\nssm-2.24\win64\nssm.exe set pg-collector AppStdout "C:\ProgramData\pg-collector\logs\stdout.log"
+C:\Tools\nssm-2.24\win64\nssm.exe set pg-collector AppStderr "C:\ProgramData\pg-collector\logs\stderr.log"
+
+# Start service
+C:\Tools\nssm-2.24\win64\nssm.exe start pg-collector
+```
+
+**Alternative (native sc.exe):**
+
+```powershell
+# Create service
+sc.exe create pg-collector binPath= "C:\Program Files\pg-collector\pg-collector.exe --config C:\ProgramData\pg-collector\config.yaml" start= auto
+
+# Configure self-healing (restart on failure)
+sc.exe failure pg-collector reset= 86400 actions= restart/5000/restart/5000/restart/30000
+
+# Start
+sc.exe start pg-collector
+```
+
+### Service Management Quick Reference
+
+| Action | Linux | macOS | Windows |
+|--------|-------|-------|---------|
+| **Start** | `sudo systemctl start pg-collector` | `sudo launchctl start com.burnsideproject.pg-collector` | `sc.exe start pg-collector` |
+| **Stop** | `sudo systemctl stop pg-collector` | `sudo launchctl stop com.burnsideproject.pg-collector` | `sc.exe stop pg-collector` |
+| **Status** | `sudo systemctl status pg-collector` | `sudo launchctl list \| grep pg-collector` | `sc.exe query pg-collector` |
+| **Logs** | `journalctl -u pg-collector -f` | `tail -f /var/log/pg-collector/stdout.log` | `Get-Content logs\stdout.log -Tail 50 -Wait` |
+| **Restart** | `sudo systemctl restart pg-collector` | Unload then load plist | `sc.exe stop pg-collector && sc.exe start pg-collector` |
+
+### Health Check
+
+All platforms support HTTP health checks:
+
+```bash
+curl http://localhost:8080/health
+# {"status":"ok","components":{"postgres":{"status":"ok"}},"timestamp":"..."}
+```
+
+---
+
 ## Uninstallation
 
 ### Linux
@@ -252,6 +412,7 @@ After installation:
 sudo systemctl stop pg-collector
 sudo systemctl disable pg-collector
 sudo rm /etc/systemd/system/pg-collector.service
+sudo systemctl daemon-reload
 sudo rm /usr/local/bin/pg-collector
 sudo rm -rf /etc/pg-collector
 sudo rm -rf /var/lib/pg-collector
@@ -266,6 +427,23 @@ sudo rm /Library/LaunchDaemons/com.burnsideproject.pg-collector.plist
 sudo rm /usr/local/bin/pg-collector
 sudo rm -rf /etc/pg-collector
 sudo rm -rf /var/lib/pg-collector
+sudo rm -rf /var/log/pg-collector
+```
+
+### Windows
+
+```powershell
+# With NSSM
+C:\Tools\nssm-2.24\win64\nssm.exe stop pg-collector
+C:\Tools\nssm-2.24\win64\nssm.exe remove pg-collector confirm
+
+# Or with sc.exe
+sc.exe stop pg-collector
+sc.exe delete pg-collector
+
+# Remove files
+Remove-Item -Recurse -Force "C:\Program Files\pg-collector"
+Remove-Item -Recurse -Force "C:\ProgramData\pg-collector"
 ```
 
 ### Docker
