@@ -337,6 +337,27 @@ s3:
   batch_max_size: 50MB
 ```
 
+### TimescaleDB Output Configuration (Pro/Enterprise)
+
+```yaml
+output_mode: timescale
+
+timescale:
+  enabled: true
+
+  # Connection to TimescaleDB server
+  conn_string: "postgres://user:pass@timescale-host:5432/postgres?sslmode=disable"
+
+  # Isolated metrics database (auto-created, default: burnside_metrics)
+  database_name: burnside_metrics
+
+  # Batch settings
+  batch_size: 100
+  flush_interval: 5s
+```
+
+> **Database Isolation**: Metrics are stored in a dedicated `burnside_metrics` database, completely isolated from your application databases. The collector creates this database automatically.
+
 ### Demo Limitations
 
 | Feature | Demo | Production |
@@ -345,6 +366,7 @@ s3:
 | mTLS/IAM auth | Supported | Required |
 | Local output | Yes | Yes |
 | S3 output | Yes | Yes |
+| TimescaleDB output | Yes | Yes |
 | Platform output | No | Yes |
 
 For production deployments, use the standard build with mTLS or IAM authentication.
