@@ -179,7 +179,7 @@ customer_id: "cust_your_id"
 database_id: "db_prod_01"
 database_name: "production"
 tenant_tier: "starter"
-output_mode: "s3_only"
+output_mode: "timescale"
 
 postgres:
   conn_string: "postgres://pgcollector@localhost:5432/mydb?sslmode=verify-full"

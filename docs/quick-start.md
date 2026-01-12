@@ -91,7 +91,7 @@ pg-collector --config /etc/pg-collector/config.yaml --test
 Expected output:
 ```
 Testing PostgreSQL connection... OK
-Testing platform connectivity... OK
+Testing cloud connectivity... OK
 All tests passed
 ```
 
@@ -136,8 +136,8 @@ sudo journalctl -u pg-collector -f
 
 Once PG Collector is running, you're done with setup. Here's what happens automatically:
 
-1. **Metrics flow** — Activity, performance, and health data streams from your database
-2. **Analysis runs** — Burnside's predictive engine identifies patterns and anomalies
+1. **Metrics flow** — Activity, performance, and health data streams from your database to our cloud
+2. **AI analyzes** — Claude 3.5 Haiku on AWS + GCP infrastructure identifies patterns and anomalies
 3. **Insights arrive** — Get alerts before problems impact your users
 
 **That's it.** No dashboards to configure, no queries to write. We handle the analytics so you can focus on your application.
@@ -228,7 +228,7 @@ curl http://localhost:8080/health
 | mTLS/IAM auth | Supported | Required |
 | Local output | Yes | Yes |
 | S3 output | Yes | Yes |
-| Platform output | No | Yes |
+| Cloud output | No | Yes |
 
 For production, see [Security Guide](security.md) for certificate setup.
 

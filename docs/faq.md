@@ -76,7 +76,7 @@ No, AWS IAM authentication only works with Amazon RDS and Aurora.
 ### What ports does PG Collector use?
 
 - **Outbound:** PostgreSQL port (usually 5432)
-- **Outbound:** Burnside platform (HTTPS 443)
+- **Outbound:** Burnside cloud (HTTPS 443)
 - **Inbound:** Health endpoint (default 8080)
 
 ### Can I run behind a proxy?
@@ -142,8 +142,8 @@ Common causes:
 
 Check your buffer configuration:
 ```yaml
-limits:
-  memory_buffer_size: 50MB
+buffers:
+  memory_capacity: 1000  # Number of samples to buffer
 ```
 
 Reduce if needed, or check for output issues causing backpressure.
@@ -165,7 +165,7 @@ Yes, when using `sslmode=verify-full` (recommended), all connections are TLS enc
 
 ### Is data encrypted at rest?
 
-The local buffer is not encrypted. The Burnside platform encrypts all data at rest.
+The local buffer is not encrypted. The Burnside cloud encrypts all data at rest.
 
 ### What permissions does the PostgreSQL user need?
 

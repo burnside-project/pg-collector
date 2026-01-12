@@ -50,7 +50,7 @@ Response:
     "host": "db.example.com:5432",
     "latency_ms": 2
   },
-  "platform": {
+  "cloud": {
     "status": "connected",
     "last_upload": "2025-01-04T12:00:00Z"
   },
@@ -245,7 +245,7 @@ groups:
 ### Configuration
 
 ```yaml
-logging:
+log:
   level: info
   format: json
   output: stdout
@@ -292,14 +292,14 @@ kubectl logs -f deployment/pg-collector
    pg-collector --config /etc/pg-collector/config.yaml --test
    ```
 
-3. Check platform connectivity
+3. Check cloud connectivity
 
 ### High Buffer Usage
 
 Buffer filling up indicates connectivity issues:
 
-1. Check platform status in `/status`
-2. Verify network connectivity to the Burnside platform
+1. Check cloud status in `/status`
+2. Verify network connectivity to the Burnside cloud (AWS + GCP)
 3. Check firewall and network rules
 4. Review error logs
 

@@ -51,7 +51,7 @@ Testing PostgreSQL connection... OK
   Version: PostgreSQL 15.2
   User: pgcollector
 
-Testing platform connectivity... OK
+Testing cloud connectivity... OK
 
 All tests passed
 ```
@@ -90,7 +90,7 @@ PostgreSQL:
   Status: connected
   Version: 15.2
 
-Platform:
+Cloud:
   Status: connected
 
 Resources:
@@ -132,14 +132,14 @@ Pattern: `PG_COLLECTOR_<SECTION>_<KEY>` (uppercase, underscores)
 Control log output:
 
 ```yaml
-logging:
+log:
   level: info    # debug, info, warn, error
-  format: json   # json, text
+  format: json   # json, console
   output: stdout # stdout, file
 ```
 
 Or via environment:
 
 ```bash
-export PG_COLLECTOR_LOGGING_LEVEL=debug
+export PG_COLLECTOR_LOG_LEVEL=debug
 ```

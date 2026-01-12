@@ -91,36 +91,43 @@ sampling:
   tables: 60s
 
 # =============================================================================
-# RESOURCE LIMITS (Optional)
+# BUFFERS (Optional)
 # =============================================================================
 
-limits:
-  # Maximum memory for buffering (default: 50MB)
-  memory_buffer_size: 50MB
+buffers:
+  # Number of samples to buffer in memory (default: 1000)
+  memory_capacity: 1000
 
   # Maximum disk buffer size (default: 500MB)
-  disk_buffer_size: 500MB
+  disk_max_size: 500MB
 
   # Disk buffer location
-  disk_buffer_path: /var/lib/pg-collector/buffer.db
+  disk_path: /var/lib/pg-collector/buffer.db
+
+  # SQLite configuration for disk buffer
+  sqlite:
+    journal_mode: WAL
+    synchronous: NORMAL
+    busy_timeout: 5000
 
 # =============================================================================
-# HEALTH ENDPOINTS (Optional)
+# HTTP ENDPOINTS (Optional)
 # =============================================================================
 
-health:
-  enabled: true
-  address: "0.0.0.0:8080"
+http:
+  address: ":8080"
+  read_timeout: 5s
+  write_timeout: 10s
 
 # =============================================================================
 # LOGGING (Optional)
 # =============================================================================
 
-logging:
+log:
   # Level: debug, info, warn, error
   level: info
 
-  # Format: json, text
+  # Format: json, console
   format: json
 
   # Output: stdout, file
@@ -260,8 +267,8 @@ Example for multiple instances on the same host:
 ```yaml
 customer_id: "cust_123"
 database_id: "db_prod_01"
-health:
-  address: "0.0.0.0:8080"
+http:
+  address: ":8080"
 postgres:
   conn_string: "postgres://pgcollector@db1.example.com:5432/postgres"
   # ...
@@ -271,8 +278,8 @@ postgres:
 ```yaml
 customer_id: "cust_123"
 database_id: "db_prod_02"
-health:
-  address: "0.0.0.0:8081"
+http:
+  address: ":8081"
 postgres:
   conn_string: "postgres://pgcollector@db2.example.com:5432/postgres"
   # ...
@@ -307,7 +314,8 @@ local:
 | Output Mode | Description |
 |-------------|-------------|
 | `local_only` | Write metrics to local filesystem |
-| `s3_only` | Write metrics to S3-compatible storage |
+| `timescale` | Write metrics to TimescaleDB (Starter tier) |
+| `timescale_with_local` | TimescaleDB + local backup (Pro tier) |
 
 ### Local Output Configuration
 
@@ -322,22 +330,7 @@ local:
   split_by_metric_type: true  # Separate files per metric type
 ```
 
-### S3 Output Configuration (Demo)
-
-```yaml
-output_mode: s3_only
-
-s3:
-  enabled: true
-  region: "us-east-1"
-  bucket: "your-bucket-name"
-  key_prefix: "pg-collector"
-  format: parquet            # parquet or json
-  batch_interval: 5m
-  batch_max_size: 50MB
-```
-
-### TimescaleDB Output Configuration (Pro/Enterprise)
+### TimescaleDB Output Configuration (Starter/Pro)
 
 ```yaml
 output_mode: timescale
@@ -367,7 +360,7 @@ timescale:
 | Local output | Yes | Yes |
 | S3 output | Yes | Yes |
 | TimescaleDB output | Yes | Yes |
-| Platform output | No | Yes |
+| Cloud output | No | Yes |
 
 For production deployments, use the standard build with mTLS or IAM authentication.
 

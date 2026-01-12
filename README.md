@@ -4,7 +4,7 @@
     <strong>From Signals to Prediction</strong>
   </p>
   <p align="center">
-    <em>AI-Powered Production Database Prediction for PostgreSQL</em>
+    <em>Edge Compute Agent for AI-Powered PostgreSQL Intelligence</em>
   </p>
 </p>
 
@@ -12,7 +12,7 @@
   <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/v/release/burnside-project/pg-collector?style=flat-square" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square" alt="License"></a>
   <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/downloads/burnside-project/pg-collector/total?style=flat-square" alt="Downloads"></a>
-  <img src="https://img.shields.io/badge/AI--Powered-Claude%203.5-blueviolet?style=flat-square" alt="AI Powered">
+  <img src="https://img.shields.io/badge/AI--Powered-Claude%203.5%20Haiku-blueviolet?style=flat-square" alt="AI Powered">
 </p>
 
 <p align="center">
@@ -30,22 +30,25 @@
 
 **Stop reacting to database issues—start predicting them.**
 
-PG Collector is an AI-powered observability agent that transforms raw PostgreSQL signals into intelligent predictions. Our reasoning engine, powered by Claude 3.5 Sonnet, analyzes your database metrics in real-time to predict issues before they impact your users.
+PG Collector is the **edge compute agent** in our AI-powered observability pipeline. It extracts PostgreSQL metrics at the edge and streams them to our cloud infrastructure (AWS + GCP), where Claude 3.5 Haiku analyzes patterns and predicts issues before they impact your users.
 
-**A single binary. Zero dependencies. 5-minute setup. AI-powered insights.**
+**A single binary. Zero dependencies. 5-minute setup. Cloud-powered AI predictions.**
 
 ```
+                          EDGE                                              CLOUD
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   Signals    │ ───▶ │   Features   │ ───▶ │  AI Engine   │ ───▶ │ Predictions  │
-│ (pg_stat_*)  │      │ (Real-time)  │      │(Claude 3.5)  │      │  & Actions   │
+│   Signals    │ ───▶ │ PG Collector │ ───▶ │  AWS + GCP   │ ───▶ │ Predictions  │
+│ (pg_stat_*)  │      │ (Edge Agent) │      │ Claude Haiku │      │  & Actions   │
 └──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
+        │                    │                      │                     │
+   Your Database      Feature Extraction     AI Classification      Slack/PagerDuty
 ```
 
 **Why Teams Choose PG Collector:**
 
 | | |
 |---|---|
-| **AI-Powered Predictions** | Claude 3.5 Sonnet analyzes patterns and predicts issues before they happen |
+| **AI-Powered Predictions** | Claude 3.5 Haiku analyzes patterns and predicts issues before they happen |
 | **From Signals to Action** | Raw metrics become actionable predictions with recommended fixes |
 | **Zero Database Impact** | Designed from the ground up to never affect your database performance |
 | **No DBA Required** | AI explains complex issues in plain language with specific actions |
@@ -116,13 +119,14 @@ sha256sum -c checksums.txt --ignore-missing
 ### How AI Prediction Works
 
 ```
-       COLLECT                    ANALYZE                    PREDICT                    ACT
-    ┌───────────┐             ┌───────────┐             ┌───────────┐             ┌───────────┐
-    │ pg_stat_  │             │  Feature  │             │  Claude   │             │  Slack/   │
-    │ activity  │────────────▶│ Engineer- │────────────▶│   3.5     │────────────▶│ PagerDuty │
-    │ database  │   Signals   │   ing     │  Features   │  Sonnet   │ Predictions │  Email    │
-    │ statements│             │           │             │           │             │           │
-    └───────────┘             └───────────┘             └───────────┘             └───────────┘
+       EDGE AGENT                   CLOUD PIPELINE                                    ACTION
+    ┌───────────┐             ┌─────────────────────────────────────┐             ┌───────────┐
+    │ pg_stat_  │             │         AWS + GCP Infrastructure    │             │  Slack/   │
+    │ activity  │────────────▶│  Feature Store ─▶ Claude 3.5 Haiku  │────────────▶│ PagerDuty │
+    │ database  │   Signals   │         (AI Classification)         │ Predictions │  Email    │
+    │ statements│             │                                     │             │           │
+    └───────────┘             └─────────────────────────────────────┘             └───────────┘
+    PG Collector                        Burnside Cloud
 ```
 
 ### What the AI Predicts
@@ -265,18 +269,19 @@ curl http://localhost:8080/metrics
 **From signals to prediction in under 5 minutes.**
 
 ```
+         EDGE                                    CLOUD                              ACTION
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Your Database  │────▶│   PG Collector  │────▶│   AI Engine     │────▶│   Your Team     │
-│   (Signals)     │     │   (Features)    │     │  (Predictions)  │     │   (Actions)     │
+│  Your Database  │────▶│   PG Collector  │────▶│   AWS + GCP     │────▶│   Your Team     │
+│   (Signals)     │     │  (Edge Agent)   │     │  Claude Haiku   │     │   (Actions)     │
 └─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘
         │                       │                       │                       │
-   Raw pg_stat_*          Real-time            Claude 3.5 Sonnet        Act before
-     metrics            feature extraction     analyzes & predicts     issues hit users
+   Raw pg_stat_*          Feature extraction     AI classification       Act before
+     metrics              + secure streaming     + predictions          issues hit users
 ```
 
-1. **Collect Signals** — PG Collector extracts metrics from pg_stat_* views
-2. **Engineer Features** — Real-time transformation into ML-ready features
-3. **AI Prediction** — Claude 3.5 Sonnet analyzes patterns and predicts issues
+1. **Collect Signals** — PG Collector extracts metrics from pg_stat_* views at the edge
+2. **Stream to Cloud** — Metrics stream securely to AWS + GCP infrastructure
+3. **AI Prediction** — Claude 3.5 Haiku analyzes patterns and predicts issues
 4. **Take Action** — Get alerts with recommended fixes before problems escalate
 
 ---
