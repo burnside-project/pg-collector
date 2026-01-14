@@ -90,6 +90,15 @@ cd demo-agent
 #    Paste a prompt from prompts/ directory
 ```
 
+<img src="https://github.com/user-attachments/assets/3e59f594-ebf3-4a37-9d44-c5ce8984345f" />
+
+---
+
+<img src="https://github.com/user-attachments/assets/aabf9664-1291-4c9b-8b6c-ec3f535475ac" />
+
+
+
+
 ### What's Included
 
 | Prompt | Use Case |
