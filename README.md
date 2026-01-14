@@ -6,11 +6,10 @@
   <p align="center">
     <em>Edge Compute Agent for AI-Powered PostgreSQL Intelligence</em>
   </p>
-</p>
 
 <p align="center">
   <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/v/release/burnside-project/pg-collector?style=flat-square" alt="Release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Community%20Freeware-orange?style=flat-square" alt="License"></a>
   <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/downloads/burnside-project/pg-collector/total?style=flat-square" alt="Downloads"></a>
   <img src="https://img.shields.io/badge/AI--Powered-Claude%203.5%20Haiku-blueviolet?style=flat-square" alt="AI Powered">
 </p>
@@ -54,6 +53,65 @@ PG Collector is the **edge compute agent** in our AI-powered observability pipel
 | **No DBA Required** | AI explains complex issues in plain language with specific actions |
 | **Works Everywhere** | RDS, Aurora, Cloud SQL, or self-managed—we've got you covered |
 | **Never Lose Data** | Resilient buffering survives network hiccups without dropping metrics |
+
+---
+
+## Local LLM Demo Testing
+
+> **Want to try AI-powered analysis without the cloud?**
+
+The `demo-agent/` directory includes a **standalone local testing tool** that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     Your Environment (Edge Only)                        │
+│                                                                         │
+│  PostgreSQL ──→ pg-collector ──→ ./telemetry/*.jsonl                   │
+│                 (single binary)         │                               │
+│                                         ▼                               │
+│                              ./prepare-snapshot.sh                      │
+│                                         │                               │
+│                                         ▼                               │
+│                              telemetry-snapshot.json ──→ Your LLM      │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Quick Start (Demo)
+
+```bash
+# 1. Run collector in local-only mode
+pg-collector --config config.yaml  # with output_mode: local_only
+
+# 2. Prepare a snapshot
+cd demo-agent
+./prepare-snapshot.sh -d ../telemetry -m 15
+
+# 3. Upload telemetry-snapshot.json to ChatGPT/Claude
+#    Paste a prompt from prompts/ directory
+```
+
+### What's Included
+
+| Prompt | Use Case |
+|--------|----------|
+| `01-health-check.md` | General database health assessment |
+| `02-slow-queries.md` | Query performance optimization |
+| `03-incident-investigation.md` | Diagnose active problems |
+| `04-capacity-planning.md` | Resource utilization and scaling |
+| `05-quick-diagnosis.md` | Fast 30-second triage |
+
+### Demo vs. Full Platform
+
+| Capability | Demo (Local) | Full SaaS Platform |
+|------------|:------------:|:------------------:|
+| Single binary, runs locally | ✅ | ✅ |
+| Real-time streaming | ❌ | ✅ |
+| Continuous monitoring | ❌ | ✅ |
+| Automated alerts (Slack/PagerDuty) | ❌ | ✅ |
+| Historical analysis (7–90 days) | ❌ | ✅ |
+| Predictive AI pipeline | ❌ | ✅ |
+
+**See [demo-agent/README.md](demo-agent/README.md) for full documentation.**
 
 ---
 
@@ -280,9 +338,9 @@ curl http://localhost:8080/metrics
 ```
 
 1. **Collect Signals** — PG Collector extracts metrics from pg_stat_* views at the edge
-2. **Stream to Cloud** — Metrics stream securely to AWS + GCP infrastructure
-3. **AI Prediction** — Claude 3.5 Haiku analyzes patterns and predicts issues
-4. **Take Action** — Get alerts with recommended fixes before problems escalate
+   2. **Stream to Cloud** — Metrics stream securely to AWS + GCP infrastructure
+   3. **AI Prediction** — Claude 3.5 Haiku analyzes patterns and predicts issues
+   4. **Take Action** — Get alerts with recommended fixes before problems escalate
 
 ---
 
@@ -306,17 +364,25 @@ curl http://localhost:8080/metrics
 ## Support
 
 - **Documentation:** [docs/](docs/)
-- **Issues:** [GitHub Issues](https://github.com/burnside-project/pg-collector/issues)
-- **Sales:** [sales@burnsideproject.ai](mailto:sales@burnsideproject.ai)
-- **Support:** [support@burnsideproject.ai](mailto:support@burnsideproject.ai)
+  - **Issues:** [GitHub Issues](https://github.com/burnside-project/pg-collector/issues)
+  - **Sales:** [sales@burnsideproject.ai](mailto:sales@burnsideproject.ai)
+  - **Support:** [support@burnsideproject.ai](mailto:support@burnsideproject.ai)
 
 ---
 
 ## License
 
-Copyright 2024-2025 Burnside Project, Inc.
+Copyright © 2024–2025 Burnside Project LLC. All rights reserved.
 
-Licensed under the Apache License, Version 2.0 with Additional Terms. See [LICENSE](LICENSE) for the complete license text including warranty disclaimers and liability limitations.
+This software is licensed under the **Burnside Project Community Freeware License v1.1**. This is **not open source software**.
+
+**You may** use this software free of charge for personal, educational, evaluation, and internal business purposes.
+
+**You may not** redistribute, sell, sublicense, or offer this software as a hosted service, SaaS, or component of a commercial product without a separate commercial license.
+
+For commercial licensing inquiries, contact [licensing@burnsideproject.ai](mailto:licensing@burnsideproject.ai).
+
+See [LICENSE](LICENSE) for the complete license text.
 
 ---
 
