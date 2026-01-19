@@ -1,5 +1,6 @@
 <p align="center">
   <h1 align="center">PG Collector</h1>
+** Distribution Repository** — This repository contains release binaries, installation scripts, and documentation for PG Collector. The collector source code is proprietary. For licensing inquiries, contact (mailto:licensing@burnsideproject.ai).
   <p align="center">
     <strong>From Signals to Prediction</strong>
   </p>
