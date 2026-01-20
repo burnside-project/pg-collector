@@ -125,22 +125,6 @@ cd demo-agent
 
 ---
 
-## Quick Install
-
-### One-Line Install (Linux/macOS)
-
-```bash
-curl -sSL https://raw.githubusercontent.com/burnside-project/pg-collector/main/scripts/install.sh | sudo bash
-```
-
-### Specific Version
-
-```bash
-curl -sSL https://raw.githubusercontent.com/burnside-project/pg-collector/main/scripts/install.sh | sudo bash -s -- --version v1.0.0
-```
-
----
-
 ## Manual Download
 
 Download the latest release from the [Releases page](https://github.com/burnside-project/pg-collector/releases).
