@@ -61,7 +61,7 @@ PG Collector is the **edge compute agent** in our AI-powered observability pipel
 
 > **Want to try AI-powered analysis without the cloud?**
 
-The `demo-agent/` directory includes a **standalone local testing tool** that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.
+> **The `demo-agent/` directory includes a **standalone local testing tool** that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.**
 
 <a href="https://burnsideproject.ai/download/pg-collector-agent-demo">Download pg-collector agent demo</a>
 
