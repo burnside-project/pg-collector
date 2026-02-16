@@ -134,9 +134,7 @@ cd demo-agent
 
 ### Test with your own LLM Chat Application (ChatGPT , Claude - We provide you demo Prompt but feel free to use your own prompt)
 
-<img src="https://github.com/user-attachments/assets/3e59f594-ebf3-4a37-9d44-c5ce8984345f" />
-
-<img src="https://github.com/user-attachments/assets/aabf9664-1291-4c9b-8b6c-ec3f535475ac" />
+![5.png](docs/assets/5.png)
 
 ### What Prompts are Included?
 
