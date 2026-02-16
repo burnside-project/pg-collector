@@ -187,8 +187,9 @@ sha256sum -c checksums.txt --ignore-missing
 
 ```
 ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-│ PG Collector│ ───▶ │  Burnside   │ ───▶ │   Alerts    │
-│   Metrics   │      │   Cloud AI  │      │ Slack/Email │
+│ PG Collector│ ───▶ │  AWS or GCP │ ───▶ │   Alerts    │
+│   Metrics   │      |  AI Agents  |      |             |
+|             |      |  Predictions│      │ Slack/Email │
 └─────────────┘      └─────────────┘      └─────────────┘
 ```
 
@@ -214,7 +215,7 @@ The AI engine continuously analyzes your PostgreSQL metrics, detects patterns, a
 
 ### Cloud Platform Features
 
-When connected to Burnside Cloud, commercial subscribers get access to:
+When connected to Burnside Project Cloud Engine, commercial subscribers get access to:
 
 **Control Panel**
 ![1.png](docs/assets/1.png)
@@ -239,8 +240,15 @@ When connected to Burnside Cloud, commercial subscribers get access to:
 
 ## Features
 **AI Agent for Analysis + Recommended Action**
-![2.png](docs/assets/2.png)
 
+**Connects to Control Plane like an Edge Compute**
+![11.png](docs/assets/11.png)
+
+**mTLS authentication to your control plane**
+![10.png](docs/assets/10.png)
+
+**AI Agent for Analysis + Recommended Action**
+![2.png](docs/assets/2.png)
 
 
 **Detail Metrics**
