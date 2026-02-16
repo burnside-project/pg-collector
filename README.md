@@ -98,10 +98,11 @@ PG Collector is available in two editions:
 ![6.png](docs/assets/6.png)
 
 
-**Feature Store that AI can label Normal vs Outside Normal**
+**Building Adaptive State**
 ![7.png](docs/assets/7.png)
 
-**Building Adaptive State**
+
+**Feature Store that AI can label Normal vs Outside Normal**
 ![8.png](docs/assets/8.png)
 
 
