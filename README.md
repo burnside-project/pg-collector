@@ -250,10 +250,12 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 **AI Agent for Analysis + Recommended Action**
 ![2.png](docs/assets/2.png)
 
+**AI-Generated Prescriptive Runbooks for Faster Resolution**
+![12.png](docs/assets/12.png)
+
 
 **Detail Metrics**
 ![3.png](docs/assets/3.png)
-
 
 
 **Current Config Audit + Recommendation with Postgres Recommended Alignments**
