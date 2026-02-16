@@ -58,7 +58,7 @@ PG Collector is available in two editions:
 - Runs locally; all output stays on your machine
 - Cut and Paste the outputs from pg-collector to your local AI Chat Windows
 - Core PostgreSQL samplers: activity, database, and statements ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))
-- Export snapshots to your favorite LLM (ChatGPT, Claude, etc.) for instant analysis
+- Example Prompt is provided for instant analysis
 - Perfect for evaluation, learning, and local development
 
 ### Commercial Edition (Subscription)
@@ -104,18 +104,7 @@ This standalone local testing tool that lets you analyze pg-collector telemetry 
 ```
 
 ### Quick Start (Demo)
-
-```bash
-# 1. Run collector in local-only mode
-pg-collector --config config.yaml  # with output_mode: local_only
-
-# 2. Prepare a snapshot
-cd demo-agent
-./prepare-snapshot.sh -d ../telemetry -m 15
-
-# 3. Upload telemetry-snapshot.json to ChatGPT/Claude
-#    Paste a prompt from prompts/ directory
-```
+Follow the README.md enclosed in the download
 
 
 ### Test with your own LLM Chat Application (ChatGPT , Claude - We provide you demo Prompt but feel free to use your own prompt)
