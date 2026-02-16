@@ -93,6 +93,25 @@ PG Collector is available in two editions:
 **Current Config Audit + Recommendation with Postgres Recommended Alignments**
 ![4.png](docs/assets/4.png)
 
+
+**Cloud Mico Batching Pipeline**
+![6.png](docs/assets/6.png)
+
+
+**Feature Store that AI can label Normal vs Outside Normal**
+![7.png](docs/assets/7.png)
+
+**Building Adaptive State**
+![8.png](docs/assets/8.png)
+
+
+**Features building defining 950, p95, p99**
+![9.png](docs/assets/9.png)
+
+
+
+
+
 **Ready to upgrade?** [Book a demo](mailto:sales@burnsideproject.ai) or visit [burnsideproject.ai](https://burnsideproject.ai).
 
 ---
