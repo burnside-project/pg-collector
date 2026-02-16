@@ -75,10 +75,10 @@ PG Collector is available in two editions:
 - **Dedicated support** — email, priority, and SLA tiers available
 
 
-![iScreen Shoter - Safari - 260216085030.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085030.png)
-![iScreen Shoter - Safari - 260216085207.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085207.png)
-![iScreen Shoter - Safari - 260216085058.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085058.png)
-![iScreen Shoter - Safari - 260216085142.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085142.png)
+![iScreen Shoter - Safari - 260216085030.png](assets/1.png)
+![iScreen Shoter - Safari - 260216085207.png](assets/2.png)
+![iScreen Shoter - Safari - 260216085058.png](assets/3.png)
+![iScreen Shoter - Safari - 260216085142.png](assets/4.png)
 
 **Ready to upgrade?** [Book a demo](mailto:sales@burnsideproject.ai) or visit [burnsideproject.ai](https://burnsideproject.ai).
 
