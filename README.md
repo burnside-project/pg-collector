@@ -385,7 +385,8 @@ This software is licensed under the **Burnside Project Community Freeware Licens
 
 For commercial licensing inquiries, contact [licensing@burnsideproject.ai](mailto:licensing@burnsideproject.ai).
 
-See [LICENSE](LICENSE) for the complete license text.
+**See the complete license text:**  
+[License](./license.md)
 
 ---
 
