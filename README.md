@@ -31,14 +31,16 @@
 
 **Stop reacting to database issues—start predicting them.**
 
-PG Collector is a lightweight metrics agent that extracts PostgreSQL telemetry and delivers it to configurable destinations—locally for evaluation, or streamed to our cloud platform where AI analyzes patterns and predicts issues before they impact your users.
+PG Collector is a lightweight edge compute agent that extracts PostgreSQL telemetry and delivers it to configurable destinations—locally for evaluation, or streamed to cloud platform where AI LLM analyzes patterns and predicts issues before they impact your users.
 
 **Single binary. Zero dependencies. 5-minute setup.**
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│ PostgreSQL   │ ───▶ │ PG Collector │ ───▶ │   Burnside   │ ───▶ │ Predictions  │
-│  Database    │      │   (Agent)    │      │    Cloud     │      │  & Alerts    │
+│ PostgreSQL   │ ───▶ │ pg-collector │ ───▶ │   Multi or   | ───▶ | Predictions  |
+|  Database    |      | Edge (Agent) |      | Single Tenant|      |   & Alerts   |
+|              │      │              │      |  AWS or GCP  |      |              |
+│              │      │              │      │    Cloud     │      │              |
 └──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
 ```
 
@@ -54,13 +56,14 @@ PG Collector is available in two editions:
 
 - Single binary, zero external dependencies
 - Runs locally; all output stays on your machine
-- Core PostgreSQL samplers: activity, database, and statements
+- Cut and Paste the outputs from pg-collector to your local AI Chat Windows
+- Core PostgreSQL samplers: activity, database, and statements ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))
 - Export snapshots to your favorite LLM (ChatGPT, Claude, etc.) for instant analysis
 - Perfect for evaluation, learning, and local development
 
 ### Commercial Edition (Subscription)
 
-> **Everything in Demo, plus the full power of Burnside Cloud.**
+> **Everything in Demo, plus the full power of AWS or GCP Cloud**
 
 - **Up to 12 PostgreSQL metric samplers** — activity, performance, replication, WAL, locks, vacuum, bloat, and more
 - **AI-powered health reports** with prescriptions and root cause analysis
@@ -70,50 +73,12 @@ PG Collector is available in two editions:
 - **PII detection**, audit logging, and query masking
 - **Multi-database monitoring** — scale from one database to unlimited
 - **Offline resilience** — continues collecting during network outages
-- **Enterprise authentication** — mTLS, AWS IAM, GCP IAM
+- **Enterprise authentication** — mTLS, AWS IAM, GCP IAM Only
 - **Flexible deployment** — systemd, Docker, Kubernetes
 - **Dedicated support** — email, priority, and SLA tiers available
 
 
-**Control Panel**
-![1.png](docs/assets/1.png)
-
-
-
-**AI Agent for Analysis + Recommended Action**
-![2.png](docs/assets/2.png)
-
-
-
-**Detail Metrics**
-![3.png](docs/assets/3.png)
-
-
-
-**Current Config Audit + Recommendation with Postgres Recommended Alignments**
-![4.png](docs/assets/4.png)
-
-
-**Cloud Mico Batching Pipeline**
-![6.png](docs/assets/6.png)
-
-
-**Building Adaptive State**
-![7.png](docs/assets/7.png)
-
-
-**Feature Store that AI can label Normal vs Outside Normal**
-![8.png](docs/assets/8.png)
-
-
-**Features building defining 950, p95, p99**
-![9.png](docs/assets/9.png)
-
-
-
-
-
-**Ready to upgrade?** [Book a demo](mailto:sales@burnsideproject.ai) or visit [burnsideproject.ai](https://burnsideproject.ai).
+**Ready to upgrade?** [Book a demo](https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0jW4tXS9oprMT773HT843ndiFdPXAK7pro0FhX3mCpVWyYE0Y0adsAe-cPVrVSqrQ0Bm2n4cPS) or visit [burnsideproject.ai](https://burnsideproject.ai).
 
 ---
 
@@ -121,7 +86,8 @@ PG Collector is available in two editions:
 
 > **Want to try AI-powered analysis without the cloud?**
 
-The `demo-agent/` directory includes a **standalone local testing tool** that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.
+**[Download Standalone Local Demo](https://burnsideproject.ai/download/pg-collector-agent-demo)**  
+This standalone local testing tool that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -261,6 +227,10 @@ The AI engine continuously analyzes your PostgreSQL metrics, detects patterns, a
 
 When connected to Burnside Cloud, commercial subscribers get access to:
 
+**Control Panel**
+![1.png](docs/assets/1.png)
+
+
 | Feature | Description |
 |---------|-------------|
 | **Health Dashboard** | Real-time overview of all monitored databases with status indicators |
@@ -279,6 +249,34 @@ When connected to Burnside Cloud, commercial subscribers get access to:
 ---
 
 ## Features
+**AI Agent for Analysis + Recommended Action**
+![2.png](docs/assets/2.png)
+
+
+
+**Detail Metrics**
+![3.png](docs/assets/3.png)
+
+
+
+**Current Config Audit + Recommendation with Postgres Recommended Alignments**
+![4.png](docs/assets/4.png)
+
+
+**Cloud Mico Batching Pipeline**
+![6.png](docs/assets/6.png)
+
+
+**Building Adaptive State**
+![7.png](docs/assets/7.png)
+
+
+**Feature Store that AI can label Normal vs Outside Normal**
+![8.png](docs/assets/8.png)
+
+
+**Features building defining 950, p95, p99**
+![9.png](docs/assets/9.png)
 
 ### What We Capture
 
