@@ -74,6 +74,12 @@ PG Collector is available in two editions:
 - **Flexible deployment** — systemd, Docker, Kubernetes
 - **Dedicated support** — email, priority, and SLA tiers available
 
+
+![iScreen Shoter - Safari - 260216085030.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085030.png)
+![iScreen Shoter - Safari - 260216085207.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085207.png)
+![iScreen Shoter - Safari - 260216085058.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085058.png)
+![iScreen Shoter - Safari - 260216085142.png](assets/iScreen%20Shoter%20-%20Safari%20-%20260216085142.png)
+
 **Ready to upgrade?** [Book a demo](mailto:sales@burnsideproject.ai) or visit [burnsideproject.ai](https://burnsideproject.ai).
 
 ---
