@@ -75,10 +75,22 @@ PG Collector is available in two editions:
 - **Dedicated support** — email, priority, and SLA tiers available
 
 
-
+- **Control Panel**
 ![1.png](docs/assets/1.png)
+
+
+
+- **AI Agent for Analysis + Recommended Action**
 ![2.png](docs/assets/2.png)
+
+
+
+- **Detail Metrics**
 ![3.png](docs/assets/3.png)
+
+
+
+- **Current Config Audit + Recommendation with Postgres Recommended Alignments**
 ![4.png](docs/assets/4.png)
 
 **Ready to upgrade?** [Book a demo](mailto:sales@burnsideproject.ai) or visit [burnsideproject.ai](https://burnsideproject.ai).
