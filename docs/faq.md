@@ -117,10 +117,8 @@ sudo journalctl -u pg-collector -f
 ### How do I change configuration?
 
 1. Edit `/etc/pg-collector/config.yaml`
-2. Validate: `pg-collector --config /etc/pg-collector/config.yaml --validate`
+2. Validate: `pg-collector --check-config --config /etc/pg-collector/config.yaml`
 3. Restart: `sudo systemctl restart pg-collector`
-
-Or send SIGHUP for reload without restart (some settings).
 
 ---
 

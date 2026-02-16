@@ -128,10 +128,11 @@ sudo chmod 644 /etc/pg-collector/certs/rds-ca-bundle.pem
 ## Step 6: Configure PG Collector
 
 ```yaml
-customer_id: "your_customer_id"
-database_id: "db_rds_prod"
+api_key: "${API_KEY}"
 
-postgres:
+databases:
+  - name: RDS Production
+    postgres:
   conn_string: "postgres://pgcollector@mydb.xxxxx.us-east-1.rds.amazonaws.com:5432/postgres?sslmode=verify-full"
   auth_method: aws_iam
   aws_iam:
@@ -142,12 +143,18 @@ postgres:
     ca_file: /etc/pg-collector/certs/rds-ca-bundle.pem
 ```
 
+See [Configuration Guide](configuration.md) for all options.
+
 ---
 
-## Step 7: Test Connection
+## Step 7: Verify Configuration
 
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --test
+# Validate config syntax
+pg-collector --check-config --config /etc/pg-collector/config.yaml
+
+# Test by running (Ctrl+C to stop after verifying connection)
+pg-collector --config /etc/pg-collector/config.yaml
 ```
 
 ---

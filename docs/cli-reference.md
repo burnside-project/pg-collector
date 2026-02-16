@@ -1,59 +1,60 @@
 # CLI Reference
 
-Command-line options and usage for PG Collector.
+Command-line options for PG Collector.
 
-## Basic Usage
+## Usage
 
 ```bash
-pg-collector [OPTIONS]
+pg-collector --config /etc/pg-collector/config.yaml
 ```
 
 ## Options
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `--config FILE` | Path to configuration file | `/etc/pg-collector/config.yaml` |
-| `--validate` | Validate configuration and exit | - |
-| `--test` | Test connections and exit | - |
-| `--diagnostics` | Print diagnostic information | - |
+| `--config` | Path to configuration file | `/etc/pg-collector/config.yaml` |
+| `--check-config` | Validate configuration and exit | - |
+| `--status` | Check if collector is running | - |
+| `--deactivate` | Remove activation and exit | - |
+| `--state-db` | Path to device state database | `/var/lib/pg-collector/state.db` |
+| `--pid-file` | Path to PID file | `/var/run/pg-collector.pid` |
 | `--version` | Print version and exit | - |
-| `--help` | Show help message | - |
+| `--version-json` | Print version as JSON | - |
 
 ## Examples
 
-### Start with Configuration
+### Start Collector
 
 ```bash
 pg-collector --config /etc/pg-collector/config.yaml
 ```
 
+On first run, automatically activates using `api_key` from config file.
+
 ### Validate Configuration
 
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --validate
+pg-collector --check-config --config /etc/pg-collector/config.yaml
 ```
 
 Output:
 ```
-Configuration valid
+Configuration file /etc/pg-collector/config.yaml is valid
+  Plan:       pro
+  Databases:  1
 ```
 
-### Test Connections
+### Check Status
 
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --test
+pg-collector --status
 ```
 
 Output:
 ```
-Testing PostgreSQL connection... OK
-  Host: db.example.com:5432
-  Version: PostgreSQL 15.2
-  User: pgcollector
-
-Testing cloud connectivity... OK
-
-All tests passed
+pg-collector is running (PID 12345)
+  Version: 1.0.0
+  Commit:  abc1234
 ```
 
 ### Print Version
@@ -64,60 +65,45 @@ pg-collector --version
 
 Output:
 ```
-pg-collector version 1.0.0 (commit: abc1234, built: 2025-01-01T00:00:00Z)
+pg-collector 1.0.0 (abc1234)
 ```
 
-### Print Diagnostics
+### Deactivate
 
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --diagnostics
+pg-collector --deactivate
 ```
 
-Output:
-```
-PG Collector Diagnostics
-========================
-Version: 1.0.0
-OS: linux/amd64
-Go: 1.22.0
-
-Configuration:
-  File: /etc/pg-collector/config.yaml
-  Valid: true
-
-PostgreSQL:
-  Host: db.example.com:5432
-  Status: connected
-  Version: 15.2
-
-Cloud:
-  Status: connected
-
-Resources:
-  Memory: 45MB / 50MB
-  Disk buffer: 0MB / 500MB
-```
+Removes stored state. Next run will re-activate using `api_key` from config.
 
 ## Exit Codes
 
 | Code | Meaning |
 |------|---------|
 | 0 | Success |
-| 1 | General error |
-| 2 | Configuration error |
-| 3 | Connection error |
+| 1 | Error |
 
 ## Environment Variables
 
-Configuration can also be set via environment variables:
+Override configuration via environment:
 
-```bash
-export PG_COLLECTOR_CUSTOMER_ID="cust_123"
-export PG_COLLECTOR_DATABASE_ID="db_prod"
-export PG_COLLECTOR_POSTGRES_CONN_STRING="postgres://..."
+| Variable | Description |
+|----------|-------------|
+| `PG_COLLECTOR_LOG_LEVEL` | Log level: debug, info, warn, error |
+| `PG_COLLECTOR_LOG_FORMAT` | Log format: json, console |
+
+### Environment Variable Expansion in Config
+
+Use `${VAR}` syntax in configuration files:
+
+```yaml
+api_key: "${PG_COLLECTOR_API_KEY}"
+# Plan is derived automatically from activation
 ```
 
-Pattern: `PG_COLLECTOR_<SECTION>_<KEY>` (uppercase, underscores)
+Supported syntax:
+- `${VAR}` - Required variable (fails if not set)
+- `${VAR:-default}` - Use default if not set
 
 ## Signals
 
@@ -125,21 +111,11 @@ Pattern: `PG_COLLECTOR_<SECTION>_<KEY>` (uppercase, underscores)
 |--------|--------|
 | `SIGTERM` | Graceful shutdown |
 | `SIGINT` | Graceful shutdown |
-| `SIGHUP` | Reload configuration |
 
-## Logging
+### Graceful Shutdown
 
-Control log output:
-
-```yaml
-log:
-  level: info    # debug, info, warn, error
-  format: json   # json, console
-  output: stdout # stdout, file
-```
-
-Or via environment:
-
-```bash
-export PG_COLLECTOR_LOG_LEVEL=debug
-```
+On shutdown signal:
+1. Stop schedulers (no new samples)
+2. Flush buffers
+3. Close database connections
+4. Exit

@@ -1,18 +1,19 @@
-<p align="center">
-  <h1 align="center">PG Collector</h1>
-** Distribution Repository** — This repository contains release binaries, installation scripts, and documentation for PG Collector. The collector source code is proprietary. For licensing inquiries, contact (mailto:licensing@burnsideproject.ai).
-  <p align="center">
-    <strong>From Signals to Prediction</strong>
-  </p>
-  <p align="center">
-    <em>Edge Compute Agent for AI-Powered PostgreSQL Intelligence</em>
-  </p>
+<h1 align="center">PG Collector</h1>
 
 <p align="center">
-  <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/v/release/burnside-project/pg-collector?style=flat-square" alt="Release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Community%20Freeware-orange?style=flat-square" alt="License"></a>
-  <a href="https://github.com/burnside-project/pg-collector/releases"><img src="https://img.shields.io/github/downloads/burnside-project/pg-collector/total?style=flat-square" alt="Downloads"></a>
-  <img src="https://img.shields.io/badge/AI--Powered-Claude%203.5%20Haiku-blueviolet?style=flat-square" alt="AI Powered">
+  <strong>From Signals to Prediction</strong><br>
+  <em>Lightweight Agent for AI-Powered PostgreSQL Intelligence</em>
+</p>
+
+<p align="center">
+  <b>Distribution Repository</b> — This repository contains release binaries, installation scripts, and documentation.<br>
+  Source code is closed-source. For licensing inquiries: <a href="mailto:licensing@burnsideproject.ai">licensing@burnsideproject.ai</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-Community%20Freeware-orange?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql" alt="PostgreSQL 12+">
+  <img src="https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey?style=flat-square" alt="Platforms">
 </p>
 
 <p align="center">
@@ -30,30 +31,50 @@
 
 **Stop reacting to database issues—start predicting them.**
 
-PG Collector is the **edge compute agent** in our AI-powered observability pipeline. It extracts PostgreSQL metrics at the edge and streams them to our cloud infrastructure (AWS + GCP), where Claude 3.5 Haiku analyzes patterns and predicts issues before they impact your users.
+PG Collector is a lightweight metrics agent that extracts PostgreSQL telemetry and delivers it to configurable destinations—locally for evaluation, or streamed to our cloud platform where AI analyzes patterns and predicts issues before they impact your users.
 
-**A single binary. Zero dependencies. 5-minute setup. Cloud-powered AI predictions.**
+**Single binary. Zero dependencies. 5-minute setup.**
 
 ```
-                          EDGE                                              CLOUD
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   Signals    │ ───▶ │ PG Collector │ ───▶ │  AWS + GCP   │ ───▶ │ Predictions  │
-│ (pg_stat_*)  │      │ (Edge Agent) │      │ Claude Haiku │      │  & Actions   │
+│ PostgreSQL   │ ───▶ │ PG Collector │ ───▶ │   Burnside   │ ───▶ │ Predictions  │
+│  Database    │      │   (Agent)    │      │    Cloud     │      │  & Alerts    │
 └──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
-        │                    │                      │                     │
-   Your Database      Feature Extraction     AI Classification      Slack/PagerDuty
 ```
 
-**Why Teams Choose PG Collector:**
+---
 
-| | |
-|---|---|
-| **AI-Powered Predictions** | Claude 3.5 Haiku analyzes patterns and predicts issues before they happen |
-| **From Signals to Action** | Raw metrics become actionable predictions with recommended fixes |
-| **Zero Database Impact** | Designed from the ground up to never affect your database performance |
-| **No DBA Required** | AI explains complex issues in plain language with specific actions |
-| **Works Everywhere** | RDS, Aurora, Cloud SQL, or self-managed—we've got you covered |
-| **Never Lose Data** | Resilient buffering survives network hiccups without dropping metrics |
+## Two Editions
+
+PG Collector is available in two editions:
+
+### Demo Edition (Free)
+
+> **Try it locally—no cloud account required.**
+
+- Single binary, zero external dependencies
+- Runs locally; all output stays on your machine
+- Core PostgreSQL samplers: activity, database, and statements
+- Export snapshots to your favorite LLM (ChatGPT, Claude, etc.) for instant analysis
+- Perfect for evaluation, learning, and local development
+
+### Commercial Edition (Subscription)
+
+> **Everything in Demo, plus the full power of Burnside Cloud.**
+
+- **Up to 12 PostgreSQL metric samplers** — activity, performance, replication, WAL, locks, vacuum, bloat, and more
+- **AI-powered health reports** with prescriptions and root cause analysis
+- **Predictive analytics** and anomaly detection
+- **Real-time streaming** to Burnside Cloud
+- **Interactive health dashboard** with configuration audit
+- **PII detection**, audit logging, and query masking
+- **Multi-database monitoring** — scale from one database to unlimited
+- **Offline resilience** — continues collecting during network outages
+- **Enterprise authentication** — mTLS, AWS IAM, GCP IAM
+- **Flexible deployment** — systemd, Docker, Kubernetes
+- **Dedicated support** — email, priority, and SLA tiers available
+
+**Ready to upgrade?** [Book a demo](mailto:sales@burnsideproject.ai) or visit [burnsideproject.ai](https://burnsideproject.ai).
 
 ---
 
@@ -61,16 +82,7 @@ PG Collector is the **edge compute agent** in our AI-powered observability pipel
 
 > **Want to try AI-powered analysis without the cloud?**
 
-> **The `demo-agent/` directory includes a **standalone local testing tool** that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.**
-
-<a href="https://burnsideproject.ai/download/pg-collector-agent-demo">Download pg-collector agent demo</a>
-
-### The demo is limited by design.
-- It captures only what was active during the runtime window (e.g., 10 minutes, 1 hour).
-- Certain datasets are intentionally capped or filtered (for example, top queries by total execution time).
-- Some collectors (such as deeper table- and index-level telemetry) are not enabled in the demo to keep the footprint small and evaluation-friendly.
-
-### The demo is meant to be illustrative, not exhaustive.
+The `demo-agent/` directory includes a **standalone local testing tool** that lets you analyze pg-collector telemetry using your own LLM (ChatGPT, Claude, etc.). No API keys or cloud infrastructure required.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -100,16 +112,14 @@ cd demo-agent
 #    Paste a prompt from prompts/ directory
 ```
 
-<img src="https://github.com/user-attachments/assets/3e59f594-ebf3-4a37-9d44-c5ce8984345f" />
 
----
+### Test with your own LLM Chat Application (ChatGPT , Claude - We provide you demo Prompt but feel free to use your own prompt)
+
+<img src="https://github.com/user-attachments/assets/3e59f594-ebf3-4a37-9d44-c5ce8984345f" />
 
 <img src="https://github.com/user-attachments/assets/aabf9664-1291-4c9b-8b6c-ec3f535475ac" />
 
-
-
-
-### What's Included
+### What Prompts are Included?
 
 | Prompt | Use Case |
 |--------|----------|
@@ -119,18 +129,23 @@ cd demo-agent
 | `04-capacity-planning.md` | Resource utilization and scaling |
 | `05-quick-diagnosis.md` | Fast 30-second triage |
 
-### Demo vs. Full Platform
+### Demo vs. Commercial
 
-| Capability | Demo (Local) | Full SaaS Platform |
-|------------|:------------:|:------------------:|
+| Capability | Demo (Free) | Commercial (Subscription) |
+|------------|:-----------:|:-------------------------:|
 | Single binary, runs locally | ✅ | ✅ |
-| Real-time streaming | ❌ | ✅ |
+| Core samplers (activity, database, statements) | ✅ | ✅ |
+| Export snapshots to your LLM | ✅ | ✅ |
+| Real-time cloud streaming | ❌ | ✅ |
 | Continuous monitoring | ❌ | ✅ |
+| AI health reports with prescriptions | ❌ | ✅ |
+| Interactive health dashboard | ❌ | ✅ |
+| Configuration audit | ❌ | ✅ |
+| Predictive analytics & anomaly detection | ❌ | ✅ |
+| Extended samplers (WAL, locks, replication, bloat, etc.) | ❌ | ✅ |
 | Automated alerts (Slack/PagerDuty) | ❌ | ✅ |
-| Historical analysis (7–90 days) | ❌ | ✅ |
-| Predictive AI pipeline | ❌ | ✅ |
-
-**See [demo-agent/README.md](demo-agent/README.md) for full documentation.**
+| Historical analysis | ❌ | ✅ |
+| Multi-database monitoring | ❌ | ✅ |
 
 ---
 
@@ -158,79 +173,71 @@ sha256sum -c checksums.txt --ignore-missing
 
 ## Choose Your Plan
 
-**Start small, scale as you grow.** All plans include predictive analytics and alerting.
+**Start small, scale as you grow.** All commercial plans include predictive analytics and alerting.
 
-| | **Starter** | **Pro** | **Enterprise** |
-|---|:---:|:---:|:---:|
-| **Databases** | 1 | Up to 10 | Unlimited |
-| **Insight Latency** | Daily digest | 5-minute alerts | Real-time (<1 min) |
-| **Statement Analytics** | Top 50 queries | Top 500 queries | Unlimited |
-| **Data Retention** | 7 days | 30 days | 90 days |
-| **Query Masking** | Basic | Full | Custom rules |
-| **Support** | Community | Email | Priority + SLA |
+| | **Starter** | **Pro** | **Business** | **Enterprise** |
+|---|:---:|:---:|:---:|:---:|
+| **Databases** | 1 | Multiple | Many | Unlimited |
+| **Metric Samplers** | Core | Extended | Full | Full + Custom |
+| **Alert Frequency** | Daily digest | Near real-time | Real-time | Real-time |
+| **Data Retention** | Standard | Extended | Long-term | Custom |
+| **Query Masking** | Basic | Full | Full | Custom rules |
+| **AI Insights** | Summary reports | Detailed analysis | Predictive | Interactive + Custom |
+| **Support** | Community | Email | Priority | SLA-backed |
 
-**Ready to get started?** [Book a demo](mailto:sales@burnsideproject.ai) or [try the free evaluation](#demo-mode-quick-evaluation).
+**Ready to get started?** [Book a demo](mailto:sales@burnsideproject.ai) or [try the free evaluation](#local-llm-demo-testing).
 
 ---
 
 ## AI-Powered Prediction
 
-**The intelligence behind the insights.** Our reasoning engine transforms raw database signals into predictions you can act on.
-
-### How AI Prediction Works
+**The intelligence behind the insights.** Our AI transforms raw database metrics into predictions you can act on.
 
 ```
-       EDGE AGENT                   CLOUD PIPELINE                                    ACTION
-    ┌───────────┐             ┌─────────────────────────────────────┐             ┌───────────┐
-    │ pg_stat_  │             │         AWS + GCP Infrastructure    │             │  Slack/   │
-    │ activity  │────────────▶│  Feature Store ─▶ Claude 3.5 Haiku  │────────────▶│ PagerDuty │
-    │ database  │   Signals   │         (AI Classification)         │ Predictions │  Email    │
-    │ statements│             │                                     │             │           │
-    └───────────┘             └─────────────────────────────────────┘             └───────────┘
-    PG Collector                        Burnside Cloud
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│ PG Collector│ ───▶ │  Burnside   │ ───▶ │   Alerts    │
+│   Metrics   │      │   Cloud AI  │      │ Slack/Email │
+└─────────────┘      └─────────────┘      └─────────────┘
 ```
 
 ### What the AI Predicts
 
-| Prediction Type | What It Detects | Lead Time |
-|-----------------|-----------------|-----------|
-| **Connection Exhaustion** | Pool approaching limits based on growth patterns | 15-30 min |
-| **Replication Lag Spike** | Replica falling behind due to write surge | 5-10 min |
-| **Lock Contention** | Blocking chains forming from concurrent transactions | Real-time |
-| **Cache Pressure** | Buffer cache hit ratio degrading | 10-15 min |
-| **Vacuum Emergency** | Tables approaching transaction wraparound | Hours/Days |
-| **Query Degradation** | Execution plans changing, slow query emergence | Minutes |
+| Prediction Type | What It Detects |
+|-----------------|-----------------|
+| **Connection Exhaustion** | Pool approaching limits based on growth patterns |
+| **Replication Lag Spike** | Replica falling behind due to write surge |
+| **Lock Contention** | Blocking chains forming from concurrent transactions |
+| **Cache Pressure** | Buffer cache hit ratio degrading |
+| **Vacuum Emergency** | Tables approaching transaction wraparound |
+| **Query Degradation** | Execution plans changing, slow query emergence |
 
-### AI Output Examples
+### How It Works
 
-**Prediction Alert:**
-```json
-{
-  "severity": "warning",
-  "prediction": "Connection pool exhaustion in ~20 minutes",
-  "confidence": 0.87,
-  "evidence": [
-    "Connection count increased 40% in last hour",
-    "Current: 85/100 connections",
-    "Growth rate: 2.3 connections/minute"
-  ],
-  "recommended_actions": [
-    "Scale connection pool to 150",
-    "Enable PgBouncer connection pooling",
-    "Review application connection lifecycle"
-  ]
-}
-```
+The AI engine continuously analyzes your PostgreSQL metrics, detects patterns, and delivers:
 
-### AI Capabilities by Tier
+- **Severity-rated alerts** — Know what's critical vs. informational
+- **Confidence scoring** — Understand how certain the prediction is
+- **Evidence-based reasoning** — See the data points driving the alert
+- **Recommended actions** — Get specific, actionable fix suggestions
 
-| Capability | Starter | Pro | Enterprise |
-|------------|:-------:|:---:|:----------:|
-| Pattern Detection | Daily | 5-min | Real-time |
-| Anomaly Alerts | Basic | Advanced | Custom ML |
-| Root Cause Analysis | - | AI-assisted | Full AI |
-| Predictive Maintenance | - | Standard | Custom |
-| Natural Language Insights | Summary | Detailed | Interactive |
+### Cloud Platform Features
+
+When connected to Burnside Cloud, commercial subscribers get access to:
+
+| Feature | Description |
+|---------|-------------|
+| **Health Dashboard** | Real-time overview of all monitored databases with status indicators |
+| **AI Health Reports** | Automated database health assessments with severity ratings |
+| **Prescriptions** | Specific, actionable fix recommendations generated by AI |
+| **Configuration Audit** | Detects suboptimal PostgreSQL settings and suggests improvements |
+| **Anomaly Detection** | Machine learning identifies unusual patterns in your metrics |
+| **Rule Engine** | Customizable alert rules with flexible thresholds and conditions |
+| **Query Analytics** | Statement-level performance tracking with trend analysis |
+| **Replication Monitoring** | Lag tracking across primary and replica topologies |
+| **Vacuum Intelligence** | Proactive alerts for autovacuum health and wraparound risk |
+| **Capacity Planning** | Growth trend projections for connections, storage, and throughput |
+| **Historical Analysis** | Query and compare metrics across configurable retention windows |
+| **Multi-Database Views** | Unified monitoring across all your PostgreSQL instances |
 
 ---
 
@@ -267,12 +274,11 @@ sha256sum -c checksums.txt --ignore-missing
 
 ## Quick Configuration
 
-You configure your database connection. Metrics delivery is handled automatically.
+You configure your API key and database connection. Metrics delivery is handled automatically.
 
 ```yaml
-# Your credentials (provided during onboarding)
-customer_id: "your_customer_id"
-database_id: "your_database_id"
+# Your API key (provided during onboarding)
+api_key: "${API_KEY}"
 
 # Your PostgreSQL connection
 postgres:
@@ -290,6 +296,7 @@ See [Configuration Guide](docs/configuration.md) for all options.
 ---
 
 ## Running as a Service
+
 
 ### Systemd (Linux)
 
@@ -327,23 +334,12 @@ curl http://localhost:8080/metrics
 
 ## How It Works
 
-**From signals to prediction in under 5 minutes.**
+**From install to insights in under 5 minutes.**
 
-```
-         EDGE                                    CLOUD                              ACTION
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  Your Database  │────▶│   PG Collector  │────▶│   AWS + GCP     │────▶│   Your Team     │
-│   (Signals)     │     │  (Edge Agent)   │     │  Claude Haiku   │     │   (Actions)     │
-└─────────────────┘     └─────────────────┘     └─────────────────┘     └─────────────────┘
-        │                       │                       │                       │
-   Raw pg_stat_*          Feature extraction     AI classification       Act before
-     metrics              + secure streaming     + predictions          issues hit users
-```
-
-1. **Collect Signals** — PG Collector extracts metrics from pg_stat_* views at the edge
-   2. **Stream to Cloud** — Metrics stream securely to AWS + GCP infrastructure
-   3. **AI Prediction** — Claude 3.5 Haiku analyzes patterns and predicts issues
-   4. **Take Action** — Get alerts with recommended fixes before problems escalate
+1. **Install** — Download and run the single binary
+2. **Connect** — Point it at your PostgreSQL database
+3. **Stream** — Metrics flow securely to Burnside Cloud
+4. **Predict** — AI analyzes patterns and alerts you before problems hit
 
 ---
 
@@ -362,6 +358,8 @@ curl http://localhost:8080/metrics
 | [Troubleshooting](docs/troubleshooting.md) | Common issues and solutions |
 | [FAQ](docs/faq.md) | Frequently asked questions |
 
+For detailed commercial documentation, see the [`/docs`](docs/) directory.
+
 ---
 
 ## Support
@@ -375,18 +373,17 @@ curl http://localhost:8080/metrics
 
 ## License
 
-Copyright © 2024–2025 Burnside Project LLC. All rights reserved.
+Copyright © 2024–2026 Burnside Project LLC. All rights reserved.
 
 This software is licensed under the **Burnside Project Community Freeware License v1.1**. This is **not open source software**.
 
-**You may** use this software free of charge for personal, educational, evaluation, and internal business purposes.
+**You may** use this software free of charge for personal, educational, evaluation, and private business purposes.
 
 **You may not** redistribute, sell, sublicense, or offer this software as a hosted service, SaaS, or component of a commercial product without a separate commercial license.
 
 For commercial licensing inquiries, contact [licensing@burnsideproject.ai](mailto:licensing@burnsideproject.ai).
 
-**See the complete license text:**  
-[License](./LICENSE.md)
+See [LICENSE](LICENSE) for the complete license text.
 
 ---
 

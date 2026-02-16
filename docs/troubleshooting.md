@@ -11,14 +11,68 @@ sudo systemctl status pg-collector
 # View recent logs
 sudo journalctl -u pg-collector -n 50
 
-# Test configuration
-pg-collector --config /etc/pg-collector/config.yaml --validate
-
-# Test connections
-pg-collector --config /etc/pg-collector/config.yaml --test
+# Validate configuration
+pg-collector --check-config --config /etc/pg-collector/config.yaml
 
 # Check health endpoint
 curl http://localhost:8080/health
+
+# Check detailed status
+curl http://localhost:8080/status
+```
+
+---
+
+## Activation Issues
+
+### Device Not Activated
+
+**Symptoms:**
+```
+device not activated - add 'api_key' to config file
+```
+
+**Solution:**
+
+Add your API key to the configuration file:
+
+```yaml
+api_key: "pgc_pro_abc123..."
+```
+
+Get your API key from the [Admin Console](https://dashboard.burnsideproject.ai).
+
+---
+
+### Activation Failed
+
+**Symptoms:**
+```
+activation failed: invalid API key
+```
+
+**Solutions:**
+
+1. **Verify API key format** - should start with `pgc_`
+2. **Check API key is active** - not expired or revoked
+3. **Check network connectivity** to Key Service
+
+---
+
+### Device Revoked
+
+**Symptoms:**
+```
+device has been revoked
+```
+
+**Solution:**
+
+Contact your administrator to re-enable or generate a new API key.
+
+To reset local state:
+```bash
+pg-collector --deactivate
 ```
 
 ---
@@ -37,12 +91,11 @@ ERROR: connection timed out
 
 1. **Check network connectivity:**
    ```bash
-   nc -zv db.example.com 5432
+   nc -zv db.burnsideproject.ai 5432
    ```
 
 2. **Check PostgreSQL is listening:**
    ```bash
-   # On the database server
    sudo ss -tlnp | grep 5432
    ```
 
@@ -91,7 +144,7 @@ SSL error: certificate verify failed
 
 5. **Test with psql first:**
    ```bash
-   psql "host=db.example.com port=5432 dbname=postgres user=pgcollector \
+   psql "host=db.burnsideproject.ai port=5432 dbname=postgres user=pgcollector \
      sslmode=verify-full \
      sslcert=/etc/pg-collector/certs/client.crt \
      sslkey=/etc/pg-collector/certs/client.key \
@@ -119,14 +172,9 @@ ERROR: could not get IAM auth token
 2. **Verify user has rds_iam role:**
    ```sql
    SELECT rolname FROM pg_roles WHERE rolname = 'pgcollector';
-   \du pgcollector
    ```
 
-3. **Check IAM policy resource ARN:**
-   - Region correct?
-   - Account ID correct?
-   - DBI resource ID correct?
-   - Username correct?
+3. **Check IAM policy resource ARN** - Region, Account ID, DBI resource ID correct?
 
 ---
 
@@ -150,7 +198,7 @@ systemctl status pg-collector
 
 2. **Validate configuration:**
    ```bash
-   pg-collector --config /etc/pg-collector/config.yaml --validate
+   pg-collector --check-config --config /etc/pg-collector/config.yaml
    ```
 
 3. **Check file permissions:**
@@ -169,7 +217,7 @@ systemctl status pg-collector
 ### High Resource Usage
 
 **Memory:**
-- Check configured limits in config.yaml
+- Check configured buffer limits
 - Reduce sampling frequency
 
 **CPU:**
@@ -180,13 +228,15 @@ systemctl status pg-collector
 
 ## Health Check Issues
 
-### Health Endpoint Returns Unhealthy
+### Health Endpoint Returns Degraded
 
 **Symptoms:**
 ```json
 {
-  "status": "unhealthy",
-  "postgres": "disconnected"
+  "status": "degraded",
+  "components": {
+    "postgres": {"status": "down"}
+  }
 }
 ```
 
@@ -197,7 +247,9 @@ systemctl status pg-collector
    curl http://localhost:8080/status | jq
    ```
 
-2. **Identify failing component and address specific issue**
+2. **Check PostgreSQL connectivity**
+
+3. **Check logs for specific errors**
 
 ---
 
@@ -205,11 +257,13 @@ systemctl status pg-collector
 
 | Error | Cause | Solution |
 |-------|-------|----------|
+| `device not activated` | Missing api_key | Add api_key to config |
 | `connection refused` | PostgreSQL not reachable | Check network/firewall |
 | `certificate verify failed` | Wrong CA certificate | Use correct ca.crt |
 | `authentication failed` | Wrong auth method | Check auth_method config |
 | `permission denied` | Missing grants | Grant pg_monitor role |
 | `timeout` | Query too slow | Increase query_timeout |
+| `grace period expired` | Offline too long | Restore network to Key Service |
 
 ---
 
@@ -217,9 +271,9 @@ systemctl status pg-collector
 
 If you're still having issues:
 
-1. **Collect diagnostics:**
+1. **Check version:**
    ```bash
-   pg-collector --config /etc/pg-collector/config.yaml --diagnostics
+   pg-collector --version
    ```
 
 2. **Check logs:**
@@ -232,9 +286,9 @@ If you're still having issues:
 4. **Contact support:** support@burnsideproject.ai
 
 Include:
-- PG Collector version: `pg-collector --version`
+- PG Collector version
 - PostgreSQL version
 - Operating system
-- Configuration (redact sensitive values)
+- Configuration (redact api_key)
 - Error messages
 - Steps to reproduce

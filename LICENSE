@@ -1,242 +1,353 @@
-# Burnside Project Dual License Agreement
-
-Copyright (c) 2026 Burnside Project LLC  
-All Rights Reserved.
-
----
-
-## IMPORTANT NOTICE
-
-BY INSTALLING, DOWNLOADING, ACCESSING, OR USING THIS SOFTWARE, YOU AGREE TO BE BOUND BY THE TERMS OF THIS LICENSE AGREEMENT.
-
-IF YOU DO NOT AGREE, DO NOT INSTALL OR USE THE SOFTWARE.
-
----
-
-## SECTION 1 — DEFINITIONS
-
-- **“Software”** means all binaries, executables, agents, container images, documentation, updates, and related materials distributed by Burnside Project LLC.
-- **“Community Edition”** means the free version provided under Section 2.
-- **“Enterprise Edition”** means the paid version provided under Section 3.
-- **“Licensor”** means Burnside Project LLC.
-- **“User”** or **“You”** means any individual or entity using the Software.
-
----
-
-## SECTION 2 — COMMUNITY LICENSE (FREE USE)
-
-### 2.1 License Grant
-
-Licensor grants you a limited, non-exclusive, non-transferable, revocable license to use the Community Edition free of charge for:
-
-- Personal use  
-- Evaluation use  
-- Internal business use (non-commercial resale)  
-- Development and testing  
-
-This license does **not** grant ownership rights.
-
-### 2.2 Restrictions
-
-You may **NOT**:
-
-- Access or request source code
-- Modify the Software
-- Redistribute the Software
-- Sell or sublicense the Software
-- Offer it as a hosted or managed service
-- Embed it into a paid commercial product
-- Reverse engineer, decompile, or disassemble
-- Circumvent licensing or feature controls
-- Remove copyright notices
-
-All rights not expressly granted are reserved.
-
-### 2.3 Not Open Source
-
-This Software is proprietary and confidential.  
-It is **NOT** licensed under any open-source license.
-
-### 2.4 No Warranty
-
-THE SOFTWARE IS PROVIDED **“AS IS”** WITHOUT WARRANTIES OF ANY KIND.
-
-Licensor disclaims all warranties including:
-
-- Merchantability  
-- Fitness for a particular purpose  
-- Non-infringement  
-- Accuracy of telemetry or AI output  
-- Continuous availability  
-
-### 2.5 Limitation of Liability
-
-TO THE MAXIMUM EXTENT PERMITTED BY LAW:
-
-LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING:
-
-- Data loss  
-- Business interruption  
-- Database corruption  
-- Security breaches  
-- Lost revenue  
-- Cloud or LLM service costs  
-
-Total liability, if any, shall not exceed **$100 USD**.
-
----
-
-## SECTION 3 — ENTERPRISE LICENSE
-
-### 3.1 Commercial License Required
-
-Use of the Software for:
-
-- Revenue-generating services  
-- SaaS offerings  
-- Resale or redistribution  
-- Managed database monitoring  
-- Multi-tenant commercial hosting  
-
-requires a separate written **Enterprise License Agreement**.
-
-**Contact:** licensing@burnsideproject.ai
-
-### 3.2 Enterprise Rights
-
-Enterprise customers may receive:
-
-- Expanded usage rights  
-- Support SLAs  
-- Feature unlocks  
-- Deployment rights  
-- Custom integration rights  
-
-All Enterprise rights are governed exclusively by the signed Enterprise Agreement.
-
----
-
-## SECTION 4 — TRIAL-TO-PAID CONVERSION
-
-### 4.1 Trial Period
-
-If the Software includes Enterprise features enabled on a trial basis, such features are licensed for a limited evaluation period defined within the Software.
-
-At expiration:
-
-- Enterprise features will automatically disable  
-- Continued commercial use requires payment  
-
-### 4.2 Automatic Conversion Requirement
-
-If You:
-
-- Use Enterprise features beyond the trial period  
-- Deploy the Software in a commercial production environment  
-- Exceed Community usage limitations  
-
-You must obtain a paid Enterprise License.
-
-Failure to do so constitutes unlicensed commercial use.
-
-### 4.3 Audit Rights
-
-Licensor reserves the right to audit usage upon reasonable notice to ensure compliance.
-
----
-
-## SECTION 5 — INTELLECTUAL PROPERTY
-
-All rights, title, and interest in and to the Software remain exclusively with Burnside Project LLC.
-
-No rights are granted by implication, estoppel, or otherwise beyond those expressly stated.
-
-**Feedback** provided via GitHub issues or other channels may be used by Licensor without obligation or compensation.
-
----
-
-## SECTION 6 — DATA & AI DISCLAIMER
-
-You are solely responsible for:
-
-- All telemetry collected  
-- Compliance with data protection laws  
-- Third-party API usage  
-- AI-generated recommendations  
-- Production deployment risks  
-
-This Software does **not** provide professional database, legal, financial, or security advice.
-
----
-
-## SECTION 7 — INDEMNIFICATION
-
-You agree to indemnify and hold harmless Burnside Project LLC from any claims, damages, liabilities, or expenses arising from:
-
-- Your use of the Software  
-- Commercial misuse  
-- Regulatory violations  
-- Data privacy failures  
-
----
-
-## SECTION 8 — TERMINATION
-
-This license terminates automatically if you violate any term.
-
-Upon termination you must:
-
-- Cease all use  
-- Destroy all copies  
-- Remove all deployments  
-
-Licensor may disable access to updates or services upon termination.
-
----
-
-## SECTION 9 — GOVERNING LAW
-
-This Agreement shall be governed by the laws of the State of Washington, USA, without regard to conflict of law principles.
-
-Any disputes shall be resolved in Washington State courts.
-
----
-
-## SECTION 10 — INVESTOR PROTECTION CLAUSE
-
-The Software is proprietary technology forming part of Licensor’s core intellectual property portfolio.
-
-Nothing in this license:
-
-- Transfers ownership  
-- Grants patent rights  
-- Permits derivative works  
-- Creates partnership or joint venture  
-
-Unauthorized commercial use may result in:
-
-- Immediate license revocation  
-- Financial damages  
-- Injunctive relief  
-
----
-
-## SECTION 11 — ENTIRE AGREEMENT
-
-This document constitutes the entire agreement for Community usage.
-
-Enterprise customers are governed exclusively by their signed agreement.
-
----
-
-## Plain-English Summary (Non-Binding)
-
-- Free for community use  
-- Not open source  
-- No redistribution or resale  
-- Enterprise license required for commercial use  
-- Trial converts to paid  
-- No warranty / no liability  
-- Strong IP protection  
-
----
+Burnside Project – Community Freeware License v1.1
+Copyright © 2024–2025 Burnside Project LLC
+
+IMPORTANT: THIS IS NOT AN OPEN SOURCE LICENSE.
+BY DOWNLOADING, INSTALLING, COPYING, OR OTHERWISE USING THIS SOFTWARE,
+YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND
+BY THE TERMS OF THIS LICENSE. IF YOU DO NOT AGREE, DO NOT USE THE SOFTWARE.
+
+--------------------------------------------------
+1. DEFINITIONS
+--------------------------------------------------
+
+"Software" means the software, documentation, and any related materials
+provided under this License, including all updates, modifications,
+enhancements, and derivative works thereof.
+
+"You" or "Licensee" means the individual or legal entity exercising
+rights under this License.
+
+"Licensor" means Burnside Project LLC, a Washington limited liability company.
+
+"Commercial Use" means any use intended for or directed toward commercial
+advantage or monetary compensation, including but not limited to SaaS,
+managed services, redistribution, OEM use, or embedding in commercial products.
+
+--------------------------------------------------
+2. GRANT OF LICENSE
+--------------------------------------------------
+
+Subject to the terms of this License, Licensor grants You a limited,
+non-exclusive, non-transferable, non-sublicensable, revocable,
+royalty-free license to use the Software solely for personal,
+educational, evaluation, and internal business purposes.
+
+This License does not grant You any rights to patents, trademarks,
+trade secrets, or other intellectual property of Licensor except
+the limited right to use the Software as expressly stated herein.
+
+Licensor reserves all rights not expressly granted in this License.
+
+--------------------------------------------------
+3. PERMITTED USES
+--------------------------------------------------
+
+You may:
+(a) Download, install, run, and use the Software free of charge;
+(b) Use the Software in development, testing, or internal production
+    environments for non-commercial purposes;
+(c) Make copies of the Software solely for backup or archival purposes;
+(d) Modify the Software for Your own internal use only (if source
+    code is provided), provided such modifications are not distributed.
+
+--------------------------------------------------
+4. RESTRICTIONS
+--------------------------------------------------
+
+You may NOT, and shall not permit any third party to:
+(a) Redistribute, publish, display, or make available the Software,
+    in whole or in part, in source or binary form, to any third party;
+(b) Sell, sublicense, rent, lease, lend, or commercially exploit
+    the Software or any portion thereof;
+(c) Offer the Software, or any functionality thereof, as a hosted
+    service, cloud service, SaaS, PaaS, managed service, API service,
+    or as any component of a commercial product or service;
+(d) Use the Software to provide services to third parties, whether
+    or not for compensation;
+(e) Remove, alter, obscure, or fail to include any copyright notices,
+    trademark notices, or this License in any copies of the Software;
+(f) Represent or imply that the Software is open source, free software,
+    or available under any license other than this License;
+(g) Reverse engineer, decompile, disassemble, or attempt to derive
+    the source code of the Software (except to the extent such
+    restriction is expressly prohibited by applicable law);
+(h) Use the Software in any manner that violates applicable law;
+(i) Use the Software to develop a competing product or service;
+(j) Transfer, assign, or delegate this License or any rights hereunder.
+
+--------------------------------------------------
+5. COMMERCIAL LICENSING
+--------------------------------------------------
+
+Any use outside the scope of Section 3, including but not limited to:
+- SaaS, PaaS, or cloud service offerings
+- Managed services or consulting services
+- Redistribution in any form
+- OEM, embedded, or bundled use
+- Use in products or services offered to third parties
+
+requires a separate written commercial license agreement with Licensor,
+to be negotiated in good faith.
+
+For commercial licensing inquiries, contact: licensing@burnsideproject.ai
+
+Unauthorized Commercial Use constitutes a material breach of this
+License and infringement of Licensor's intellectual property rights.
+
+--------------------------------------------------
+6. NO SUPPORT; NO MAINTENANCE
+--------------------------------------------------
+
+Licensor has no obligation whatsoever to provide support, maintenance,
+updates, upgrades, bug fixes, patches, security updates, enhancements,
+documentation, training, or any other services related to the Software.
+
+Any support, updates, or other services provided by Licensor are
+provided at Licensor's sole discretion and do not create any ongoing
+obligation or expectation of future support.
+
+You acknowledge that the Software may contain bugs, errors, defects,
+or security vulnerabilities, and Licensor has no obligation to correct
+or address any such issues.
+
+--------------------------------------------------
+7. DISCLAIMER OF WARRANTIES
+--------------------------------------------------
+
+THE SOFTWARE IS PROVIDED STRICTLY "AS IS" AND "AS AVAILABLE" AND
+"WITH ALL FAULTS."
+
+LICENSOR HEREBY DISCLAIMS, TO THE MAXIMUM EXTENT PERMITTED BY
+APPLICABLE LAW, ALL WARRANTIES, WHETHER EXPRESS, IMPLIED, STATUTORY,
+OR OTHERWISE, INCLUDING BUT NOT LIMITED TO:
+
+(a) ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+    PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT;
+(b) ANY WARRANTIES ARISING FROM COURSE OF DEALING, COURSE OF
+    PERFORMANCE, OR USAGE OF TRADE;
+(c) ANY WARRANTIES THAT THE SOFTWARE WILL MEET YOUR REQUIREMENTS,
+    OPERATE WITHOUT INTERRUPTION, BE ERROR-FREE, SECURE, ACCURATE,
+    RELIABLE, OR FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS;
+(d) ANY WARRANTIES REGARDING THE RESULTS OBTAINED FROM USE OF
+    THE SOFTWARE;
+(e) ANY WARRANTIES THAT DEFECTS WILL BE CORRECTED;
+(f) ANY WARRANTIES REGARDING COMPATIBILITY WITH ANY HARDWARE,
+    SOFTWARE, SYSTEMS, OR DATA;
+(g) ANY WARRANTIES REGARDING DATA INTEGRITY, ACCURACY, OR SECURITY.
+
+YOU EXPRESSLY ACKNOWLEDGE AND AGREE THAT USE OF THE SOFTWARE IS
+AT YOUR SOLE RISK. YOU ASSUME THE ENTIRE RISK AS TO THE QUALITY,
+PERFORMANCE, ACCURACY, AND EFFORT OF THE SOFTWARE.
+
+NO ORAL OR WRITTEN INFORMATION OR ADVICE GIVEN BY LICENSOR OR ITS
+AUTHORIZED REPRESENTATIVES SHALL CREATE A WARRANTY OR IN ANY WAY
+INCREASE THE SCOPE OF THIS LICENSE.
+
+SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES,
+SO THE ABOVE EXCLUSIONS MAY NOT APPLY TO YOU. IN SUCH JURISDICTIONS,
+LICENSOR'S WARRANTIES ARE LIMITED TO THE MINIMUM REQUIRED BY LAW.
+
+--------------------------------------------------
+8. LIMITATION OF LIABILITY
+--------------------------------------------------
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW:
+
+(a) IN NO EVENT SHALL LICENSOR, ITS AFFILIATES, OFFICERS, DIRECTORS,
+    EMPLOYEES, AGENTS, LICENSORS, SUPPLIERS, OR SERVICE PROVIDERS
+    (COLLECTIVELY, "LICENSOR PARTIES") BE LIABLE FOR ANY:
+
+    - INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY,
+      OR PUNITIVE DAMAGES;
+    - LOSS OF DATA, DATA CORRUPTION, OR DATA BREACH;
+    - LOSS OF PROFITS, REVENUE, BUSINESS, GOODWILL, OR ANTICIPATED
+      SAVINGS;
+    - BUSINESS INTERRUPTION OR LOSS OF BUSINESS OPPORTUNITY;
+    - COST OF PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    - LOSS OF USE OR LOSS OF ACCESS;
+    - PERSONAL INJURY OR PROPERTY DAMAGE;
+    - ANY OTHER PECUNIARY OR NON-PECUNIARY LOSS;
+
+    ARISING OUT OF OR IN CONNECTION WITH THIS LICENSE OR THE USE,
+    INABILITY TO USE, PERFORMANCE, OR NON-PERFORMANCE OF THE SOFTWARE,
+    REGARDLESS OF THE CAUSE OF ACTION OR THE THEORY OF LIABILITY
+    (INCLUDING CONTRACT, TORT, NEGLIGENCE, STRICT LIABILITY, PRODUCT
+    LIABILITY, OR OTHERWISE), EVEN IF LICENSOR HAS BEEN ADVISED OF
+    THE POSSIBILITY OF SUCH DAMAGES, AND EVEN IF A LIMITED REMEDY
+    SET FORTH HEREIN IS FOUND TO HAVE FAILED OF ITS ESSENTIAL PURPOSE.
+
+(b) IN NO EVENT SHALL THE AGGREGATE LIABILITY OF THE LICENSOR PARTIES
+    FOR ALL CLAIMS ARISING OUT OF OR RELATING TO THIS LICENSE OR THE
+    SOFTWARE EXCEED THE GREATER OF:
+
+    (i)  ONE HUNDRED U.S. DOLLARS (USD $100.00); OR
+    (ii) THE AMOUNT YOU ACTUALLY PAID FOR THE SOFTWARE (IF ANY).
+
+(c) THE FOREGOING LIMITATIONS SHALL APPLY NOTWITHSTANDING:
+    - ANY FAILURE OF ESSENTIAL PURPOSE OF ANY LIMITED REMEDY;
+    - ANY NEGLIGENCE, GROSS NEGLIGENCE, OR WILLFUL MISCONDUCT
+      BY LICENSOR (TO THE EXTENT PERMITTED BY LAW);
+    - ANY BREACH OF THIS LICENSE BY LICENSOR.
+
+(d) YOU ACKNOWLEDGE THAT THE LIMITATIONS OF LIABILITY IN THIS SECTION
+    ARE AN ESSENTIAL ELEMENT OF THE BARGAIN BETWEEN THE PARTIES AND
+    THAT LICENSOR WOULD NOT PROVIDE THE SOFTWARE WITHOUT SUCH LIMITATIONS.
+
+SOME JURISDICTIONS DO NOT ALLOW THE LIMITATION OR EXCLUSION OF
+LIABILITY FOR CERTAIN DAMAGES, SO THE ABOVE LIMITATIONS MAY NOT
+APPLY TO YOU. IN SUCH JURISDICTIONS, LICENSOR'S LIABILITY IS
+LIMITED TO THE MINIMUM REQUIRED BY LAW.
+
+--------------------------------------------------
+9. INDEMNIFICATION
+--------------------------------------------------
+
+You shall indemnify, defend, and hold harmless Licensor and the
+Licensor Parties from and against any and all claims, actions,
+suits, proceedings, losses, damages, liabilities, costs, and
+expenses (including reasonable attorneys' fees and court costs)
+arising out of or relating to:
+
+(a) Your use or misuse of the Software;
+(b) Your violation of this License;
+(c) Your violation of any applicable law, regulation, or third-party
+    right (including intellectual property rights);
+(d) Any data processed by You using the Software;
+(e) Any products, services, or content created using the Software;
+(f) Any claim that Your use of the Software caused damage to a
+    third party.
+
+This indemnification obligation shall survive termination of this
+License.
+
+--------------------------------------------------
+10. ASSUMPTION OF RISK
+--------------------------------------------------
+
+You expressly acknowledge and agree that:
+
+(a) You have independently evaluated the Software and determined
+    that it is suitable for Your intended use;
+(b) You assume all risks associated with the use of the Software,
+    including but not limited to risks of data loss, system failure,
+    security vulnerabilities, and business interruption;
+(c) You are solely responsible for determining the appropriateness
+    of using the Software and assume all risks associated with
+    Your exercise of rights under this License;
+(d) Licensor has no knowledge of Your specific requirements,
+    environment, or intended use of the Software;
+(e) You are solely responsible for all backup, security, and
+    disaster recovery measures related to Your use of the Software;
+(f) The Software may produce inaccurate, incomplete, or erroneous
+    results, and You are solely responsible for verifying any
+    output or results produced by the Software.
+
+--------------------------------------------------
+11. TERMINATION
+--------------------------------------------------
+
+(a) This License is effective until terminated.
+
+(b) This License will terminate automatically and immediately,
+    without notice, if You breach any term of this License.
+
+(c) Licensor may terminate this License at any time, for any reason
+    or no reason, with or without notice.
+
+(d) Upon termination, You must immediately cease all use of the
+    Software and destroy all copies in Your possession or control.
+
+(e) Sections 1, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, and 16 shall
+    survive termination of this License.
+
+--------------------------------------------------
+12. AUDIT RIGHTS
+--------------------------------------------------
+
+Licensor reserves the right, upon reasonable notice, to audit Your
+use of the Software to verify compliance with this License. You
+agree to cooperate with any such audit and to provide reasonable
+access to relevant records and systems.
+
+--------------------------------------------------
+13. EXPORT COMPLIANCE
+--------------------------------------------------
+
+You agree to comply with all applicable export laws and regulations,
+including U.S. export controls. You represent that You are not
+located in, or a resident or national of, any country subject to
+U.S. trade sanctions.
+
+--------------------------------------------------
+14. GOVERNING LAW AND JURISDICTION
+--------------------------------------------------
+
+(a) This License shall be governed by and construed in accordance
+    with the laws of the State of Washington, USA, without regard
+    to its conflict of laws principles.
+
+(b) Any dispute arising out of or relating to this License shall
+    be subject to the exclusive jurisdiction of the state and
+    federal courts located in King County, Washington, and You hereby
+    consent to the personal jurisdiction of such courts.
+
+(c) You waive any objection to venue in such courts and any claim
+    that such courts are an inconvenient forum.
+
+(d) The United Nations Convention on Contracts for the International
+    Sale of Goods shall not apply to this License.
+
+--------------------------------------------------
+15. WAIVER OF JURY TRIAL
+--------------------------------------------------
+
+TO THE FULLEST EXTENT PERMITTED BY LAW, EACH PARTY HEREBY WAIVES
+ITS RIGHT TO A JURY TRIAL IN CONNECTION WITH ANY DISPUTE ARISING
+OUT OF OR RELATING TO THIS LICENSE.
+
+--------------------------------------------------
+16. GENERAL PROVISIONS
+--------------------------------------------------
+
+(a) ENTIRE AGREEMENT: This License constitutes the entire agreement
+    between You and Licensor regarding the Software and supersedes
+    all prior or contemporaneous agreements, representations,
+    warranties, and understandings, whether written or oral.
+
+(b) AMENDMENT: This License may not be amended or modified except
+    by a written instrument signed by an authorized representative
+    of Licensor.
+
+(c) WAIVER: No failure or delay by Licensor in exercising any right
+    under this License shall constitute a waiver of that right.
+    No waiver of any breach shall constitute a waiver of any
+    subsequent breach.
+
+(d) SEVERABILITY: If any provision of this License is held invalid,
+    illegal, or unenforceable, the remaining provisions shall
+    continue in full force and effect. The invalid provision shall
+    be modified to the minimum extent necessary to make it valid
+    and enforceable while preserving the parties' intent.
+
+(e) ASSIGNMENT: You may not assign or transfer this License or any
+    rights hereunder without Licensor's prior written consent.
+    Licensor may assign this License without restriction.
+
+(f) NO THIRD-PARTY BENEFICIARIES: This License does not create any
+    third-party beneficiary rights.
+
+(g) NOTICES: Any notices under this License shall be in writing
+    and delivered to licensing@burnsideproject.ai.
+
+(h) HEADINGS: Section headings are for convenience only and shall
+    not affect interpretation.
+
+(i) CONSTRUCTION: This License shall not be construed against the
+    drafter.
+
+(j) RELATIONSHIP: Nothing in this License creates a partnership,
+    joint venture, agency, or employment relationship.
+
+--------------------------------------------------
+END OF LICENSE
+--------------------------------------------------

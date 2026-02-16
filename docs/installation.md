@@ -186,19 +186,16 @@ tar -xzf pg-collector-darwin-arm64-demo.tar.gz
 
 ```yaml
 # demo-config.yaml
-customer_id: "demo"
-database_id: "my_db"
-output_mode: local_only
-
-postgres:
-  conn_string: "postgres://user:password@localhost:5432/postgres"
-  auth_method: password  # Only in demo builds
+databases:
+  - name: local
+    postgres:
+      conn_string: "postgres://user:password@localhost:5432/postgres"
+      auth_method: password  # Only in demo builds
 
 local:
   enabled: true
   path: ./output
   format: jsonl
-  split_by_metric_type: true
 ```
 
 ### Run Demo

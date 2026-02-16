@@ -94,7 +94,7 @@ sudo systemctl reload postgresql
 
 ```yaml
 postgres:
-  conn_string: "postgres://pgcollector@db.example.com:5432/postgres?sslmode=verify-full"
+  conn_string: "postgres://pgcollector@db.burnsideproject.ai:5432/postgres?sslmode=verify-full"
   auth_method: cert
   tls:
     mode: verify-full
@@ -113,10 +113,14 @@ sudo chmod 600 /etc/pg-collector/certs/*.key
 sudo chmod 644 /etc/pg-collector/certs/*.crt
 ```
 
-### Step 5: Test Connection
+### Step 5: Verify Configuration
 
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --test
+# Validate config syntax
+pg-collector --check-config --config /etc/pg-collector/config.yaml
+
+# Test by running (Ctrl+C to stop after verifying connection)
+pg-collector --config /etc/pg-collector/config.yaml
 ```
 
 ---
@@ -238,6 +242,134 @@ openssl x509 -in client.crt -text -noout
 
 ---
 
+## Query Masking
+
+PG Collector masks sensitive values in SQL queries before transmission.
+
+### Masking Levels
+
+| Level | Description | Tier |
+|-------|-------------|------|
+| `none` | No masking | - |
+| `basic` | Mask string literals and numbers | Starter |
+| `full` | Mask all values including identifiers | Pro |
+| `custom` | User-defined patterns | Enterprise |
+
+### Configuration
+
+```yaml
+security:
+  query_masking_level: basic
+
+  # Custom patterns (Enterprise)
+  masking_patterns:
+    - "password"
+    - "secret"
+    - "token"
+    - "api_key"
+```
+
+### Example
+
+Original query:
+```sql
+SELECT * FROM users WHERE email = 'john@burnsideproject.ai' AND password = 'secret123'
+```
+
+Masked (basic):
+```sql
+SELECT * FROM users WHERE email = '?' AND password = '?'
+```
+
+---
+
+## PII Detection (Enterprise)
+
+Automatically detect and mask personally identifiable information.
+
+```yaml
+security:
+  pii_detection: true
+```
+
+Detected patterns:
+- Email addresses
+- Phone numbers
+- Social Security Numbers
+- Credit card numbers
+
+---
+
+## Audit Logging (Enterprise)
+
+Log security-relevant events for compliance.
+
+```yaml
+security:
+  audit_logging: true
+  audit_log_path: /var/log/pg-collector/audit.log
+```
+
+Logged events:
+- Activation/deactivation
+- Configuration changes
+- Authentication failures
+- Query vault access
+
+---
+
+## IP Allowlist (Enterprise)
+
+Restrict HTTP endpoint access to specific IP addresses or CIDR ranges. This provides network-level access control for the collector's health and metrics endpoints.
+
+### Configuration
+
+```yaml
+security:
+  ip_allowlist:
+    enabled: true
+    allowlist:
+      - "10.0.0.0/8"           # Private network
+      - "192.168.1.100/32"     # Single IP
+      - "2001:db8::/32"        # IPv6 CIDR
+```
+
+### Features
+
+- **CIDR notation**: Supports both IPv4 and IPv6 ranges
+- **Single IPs**: Automatically converts to /32 (IPv4) or /128 (IPv6)
+- **Proxy headers**: Reads `X-Forwarded-For` and `X-Real-IP` for client IP
+- **Audit logging**: Blocked requests logged to audit log (if enabled)
+- **Runtime management**: Add/remove CIDRs without restart (via API)
+
+### Response
+
+When an IP is blocked, the endpoint returns:
+```
+HTTP/1.1 403 Forbidden
+```
+
+---
+
+## Tier Enforcement (Critical)
+
+PG Collector enforces tier limits using **server-provided tier values**. This prevents tier spoofing where a user might try to bypass limits by editing the local configuration.
+
+### How It Works
+
+1. On activation, the Key Service returns the authorized tier for the API key
+2. The collector **always uses the server-provided tier**, ignoring any local config overrides
+3. If local config tier differs from server tier, a warning is logged
+
+### Security Implications
+
+- **Cannot bypass** tier limits via local configuration
+- **Cannot access** Enterprise features with a Starter API key
+- **Audit logged** when tier mismatch detected
+- **Automatic enforcement** - no manual configuration required
+
+---
+
 ## Security Checklist
 
 - [ ] Using certificate or IAM authentication (no passwords)
@@ -245,5 +377,8 @@ openssl x509 -in client.crt -text -noout
 - [ ] Certificate files have restricted permissions (600)
 - [ ] PostgreSQL user has minimal permissions (pg_monitor only)
 - [ ] Network access restricted to necessary IPs
+- [ ] IP allowlist configured (Enterprise)
 - [ ] Systemd service hardened
 - [ ] Certificate rotation scheduled
+- [ ] Query masking enabled
+- [ ] PII detection enabled (if Enterprise)

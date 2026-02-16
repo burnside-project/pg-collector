@@ -10,108 +10,111 @@ Override with: `pg-collector --config /path/to/config.yaml`
 
 ---
 
+## Minimal Configuration
+
+The simplest production configuration — just your API key and a database connection:
+
+```yaml
+api_key: "${API_KEY}"
+
+databases:
+  - name: Production
+    postgres:
+      conn_string: "postgres://pgcollector@your-db:5432/postgres?sslmode=verify-full"
+      auth_method: cert
+      tls:
+        mode: verify-full
+        ca_file: /etc/pg-collector/certs/ca.crt
+        cert_file: /etc/pg-collector/certs/client.crt
+        key_file: /etc/pg-collector/certs/client.key
+```
+
+Everything else — tier, features, output destination, sampling intervals — is derived automatically from your subscription after [device activation](activation.md).
+
+---
+
 ## Full Configuration Reference
 
 ```yaml
 # =============================================================================
-# IDENTITY (Required)
+# ACTIVATION (Required for production)
 # =============================================================================
 
-# Customer identifier (provided during onboarding)
-customer_id: "your_customer_id"
-
-# Unique identifier for this database
-database_id: "db_prod_01"
-
-# Human-readable name (optional)
-database_name: "Production Database"
+# API key from admin console (required)
+# On first run, collector activates using this key
+api_key: "${API_KEY}"
 
 # =============================================================================
-# POSTGRESQL CONNECTION (Required)
+# DATABASES (Required)
 # =============================================================================
 
-postgres:
-  # Connection string
-  conn_string: "postgres://pgcollector@db.example.com:5432/postgres?sslmode=verify-full"
+databases:
+  - name: "Production"
 
-  # Authentication method: cert, aws_iam, gcp_iam
-  auth_method: cert
+    # Optional: Filter which samplers run for this database
+    # If omitted, all tier-allowed samplers are enabled
+    # samplers: [activity, database, statements, bgwriter, replication, vacuum]
 
-  # Query timeout (protects against blocking)
-  query_timeout: 5s
-
-  # TLS configuration
-  tls:
-    # Mode: disable, require, verify-ca, verify-full
-    mode: verify-full
-
-    # CA certificate for server verification
-    ca_file: /etc/pg-collector/certs/ca.crt
-
-    # Client certificate (for mTLS)
-    cert_file: /etc/pg-collector/certs/client.crt
-
-    # Client private key (for mTLS)
-    key_file: /etc/pg-collector/certs/client.key
-
-  # AWS IAM authentication (for RDS/Aurora)
-  aws_iam:
-    enabled: false
-    region: "us-east-1"
-
-  # GCP IAM authentication (for Cloud SQL)
-  gcp_iam:
-    enabled: false
+    postgres:
+      conn_string: "postgres://pgcollector@your-db:5432/postgres?sslmode=verify-full"
+      auth_method: cert
+      query_timeout: 5s
+      tls:
+        mode: verify-full
+        ca_file: /etc/pg-collector/certs/ca.crt
+        cert_file: /etc/pg-collector/certs/client.crt
+        key_file: /etc/pg-collector/certs/client.key
 
 # =============================================================================
-# SAMPLING INTERVALS (Optional)
+# SAMPLING INTERVALS
 # =============================================================================
 
-# Adjust based on your subscription tier and monitoring needs
 sampling:
-  # Activity metrics (sessions, wait events)
-  activity: 1s
+  # Enable/disable samplers
+  enabled:
+    activity: true
+    database: true
+    statements: true
+    bgwriter: true
+    replication: true
+    vacuum: true
+    locks: false       # Extended, disabled by default
+    wal: false
+    slots: false
+    wal_receiver: false
+    statio: false
+    bloat: false
 
-  # Database-level stats
-  database: 10s
-
-  # Statement statistics
-  statements: 30s
-
-  # Background writer stats
-  bgwriter: 10s
-
-  # Replication metrics
-  replication: 1s
-
-  # Vacuum progress
-  vacuum: 30s
-
-  # Table/index statistics
-  tables: 60s
-
-# =============================================================================
-# BUFFERS (Optional)
-# =============================================================================
-
-buffers:
-  # Number of samples to buffer in memory (default: 1000)
-  memory_capacity: 1000
-
-  # Maximum disk buffer size (default: 500MB)
-  disk_max_size: 500MB
-
-  # Disk buffer location
-  disk_path: /var/lib/pg-collector/buffer.db
-
-  # SQLite configuration for disk buffer
-  sqlite:
-    journal_mode: WAL
-    synchronous: NORMAL
-    busy_timeout: 5000
+  # Sampling intervals (plan defaults applied automatically)
+  # You can override intervals here, but they will be clamped to your plan's
+  # minimum interval. For example, setting activity: 5s on a Starter plan
+  # will use the Starter minimum instead.
+  activity: 10s
+  database: 30s
+  statements: 60s
 
 # =============================================================================
-# HTTP ENDPOINTS (Optional)
+# SAMPLER REFERENCE
+# =============================================================================
+#
+# Core (Default enabled):
+#   activity    - Active sessions, wait events (pg_stat_activity)
+#   database    - Transaction rates, cache hits (pg_stat_database)
+#   statements  - Query performance metrics (pg_stat_statements)
+#   bgwriter    - Checkpoint and buffer stats (pg_stat_bgwriter)
+#   replication - Replication lag and sync state (pg_stat_replication)
+#   vacuum      - Dead tuples, vacuum progress (pg_stat_user_tables)
+#
+# Extended (Default disabled):
+#   locks        - Lock contention analysis (pg_locks)
+#   wal          - WAL generation stats (pg_stat_wal, PG 14+)
+#   slots        - Replication slot lag (pg_replication_slots)
+#   wal_receiver - Standby receive lag (pg_stat_wal_receiver)
+#   statio       - Table I/O statistics (pg_statio_user_tables)
+#   bloat        - Table/index bloat estimation
+
+# =============================================================================
+# HTTP ENDPOINTS
 # =============================================================================
 
 http:
@@ -120,255 +123,226 @@ http:
   write_timeout: 10s
 
 # =============================================================================
-# LOGGING (Optional)
+# LOGGING
 # =============================================================================
 
 log:
-  # Level: debug, info, warn, error
-  level: info
+  level: info      # debug, info, warn, error
+  format: json     # json, console
 
-  # Format: json, console
-  format: json
+# =============================================================================
+# SECURITY
+# =============================================================================
 
-  # Output: stdout, file
-  output: stdout
+security:
+  # Query masking: none, basic, full, custom
+  query_masking_level: basic
+
+  # PII detection (Business/Enterprise only)
+  pii_detection: false
+
+  # Audit logging (Business/Enterprise only)
+  audit_logging: false
+  audit_log_path: /var/log/pg-collector/audit.log
+
+  # Custom masking patterns (Enterprise only)
+  masking_patterns:
+    - "password"
+    - "secret"
+    - "token"
 ```
+
+---
+
+## Plan-Based Defaults
+
+Features and limits vary by subscription plan. The collector automatically applies the correct defaults based on your plan after [device activation](activation.md).
+
+| Feature | Demo | Starter | Pro | Business | Enterprise |
+|---------|:----:|:-------:|:---:|:--------:|:----------:|
+| Database limit | 1 | 1 | Multiple | Many | Unlimited |
+| Sampling frequency | Basic | Standard | Fast | Faster | Real-time |
+| Query masking | Basic | Basic | Custom | Custom | Custom |
+| PII detection | Basic | Basic | Basic | Full | Full |
+| Audit logging | — | — | — | Yes | Yes |
+
+See [Subscription Plans](plans.md) for the full comparison including sampler availability and security features.
+
+!!! note "Plan Minimums"
+
+    If you set a sampling interval lower than your plan allows, the collector will use the plan minimum instead.
 
 ---
 
 ## Environment Variables
 
-All configuration options can be set via environment variables:
+PG Collector supports environment variable expansion in all configuration values. Use `${VAR}` for required variables and `${VAR:-default}` for optional ones with fallback values.
 
-```bash
-export PG_COLLECTOR_CUSTOMER_ID="cust_123"
-export PG_COLLECTOR_DATABASE_ID="db_prod"
-export PG_COLLECTOR_POSTGRES_CONN_STRING="postgres://..."
+### Supported Variables
+
+**Authentication:**
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `API_KEY` | API key for activation | (required) |
+
+**PostgreSQL Connection:**
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PG_CONN_STRING` | Full connection string | (required) |
+| `PG_HOST` | PostgreSQL host | `localhost` |
+| `PG_PORT` | PostgreSQL port | `5432` |
+| `PG_USER` | PostgreSQL username | — |
+| `PG_AUTH_METHOD` | Auth method (`cert`, `aws_iam`, `gcp_iam`) | `cert` |
+| `PG_TLS_MODE` | TLS mode | `verify-full` |
+| `PG_CA_FILE` | CA certificate path | — |
+| `PG_CERT_FILE` | Client certificate path | — |
+| `PG_KEY_FILE` | Client key path | — |
+
+**Logging and HTTP:**
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `LOG_LEVEL` | Log level (`debug`, `info`, `warn`, `error`) | `info` |
+| `LOG_FORMAT` | Log format (`json`, `console`) | `json` |
+| `HTTP_ADDRESS` | Health endpoint bind address | `:8080` |
+
+### Usage in Config
+
+```yaml
+api_key: "${API_KEY}"
+
+databases:
+  - name: Production
+    postgres:
+      conn_string: "postgres://${PG_USER}@${PG_HOST}:${PG_PORT:-5432}/${PG_DB}?sslmode=verify-full"
 ```
 
-Pattern: `PG_COLLECTOR_<SECTION>_<KEY>` (uppercase, underscores)
+### Kubernetes Secrets Example
 
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-collector-secrets
+type: Opaque
+stringData:
+  API_KEY: "pgc_pro_abc123..."
+  PG_CONN_STRING: "postgres://pgcollector@db:5432/postgres"
 ---
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: pg-collector
+          envFrom:
+            - secretRef:
+                name: pg-collector-secrets
+```
 
-## Configuration Precedence
+### Docker Compose Example
 
-1. Command-line flags (highest)
-2. Environment variables
-3. Configuration file
-4. Default values (lowest)
+```yaml
+services:
+  pg-collector:
+    image: burnside/pg-collector:latest
+    environment:
+      - API_KEY=${API_KEY}
+      - PG_CONN_STRING=postgres://pgcollector@db:5432/postgres
+    env_file:
+      - .env
+```
+
+### Security Best Practices
+
+- **Never hardcode secrets** in config files — always use `${VAR}` references
+- **Use secret managers** in production — AWS Secrets Manager, GCP Secret Manager, HashiCorp Vault, or Kubernetes Secrets
+- **Restrict access** to `.env` files — `chmod 600 .env`
+- **Validate at startup** — use `pg-collector --check-config` to verify all variables resolve before running
 
 ---
 
 ## Validation
 
-Validate configuration before starting:
-
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --validate
+pg-collector --check-config --config /etc/pg-collector/config.yaml
 ```
 
 ---
 
-## Minimal Configuration
+## Demo Mode
 
-Smallest working configuration:
-
-```yaml
-customer_id: "cust_123"
-database_id: "db_01"
-
-postgres:
-  conn_string: "postgres://pgcollector@localhost:5432/postgres"
-  auth_method: cert
-  tls:
-    mode: verify-full
-    ca_file: /etc/pg-collector/certs/ca.crt
-    cert_file: /etc/pg-collector/certs/client.crt
-    key_file: /etc/pg-collector/certs/client.key
-```
-
----
-
-## Cloud-Specific Examples
-
-### AWS RDS
+For quick evaluation without API key:
 
 ```yaml
-customer_id: "cust_123"
-database_id: "db_rds_prod"
+# Demo mode uses password auth (not for production)
+databases:
+  - name: local
+    postgres:
+      conn_string: "postgres://user:pass@localhost:5432/postgres"
+      auth_method: password
 
-postgres:
-  conn_string: "postgres://pgcollector@mydb.xxx.us-east-1.rds.amazonaws.com:5432/postgres?sslmode=verify-full"
-  auth_method: aws_iam
-  aws_iam:
-    enabled: true
-    region: "us-east-1"
-  tls:
-    mode: verify-full
-    ca_file: /etc/pg-collector/certs/rds-ca-bundle.pem
+local:
+  enabled: true
+  path: ./output
 ```
 
-### GCP Cloud SQL
-
-```yaml
-customer_id: "cust_123"
-database_id: "db_cloudsql_prod"
-
-postgres:
-  conn_string: "postgres://pgcollector@/postgres?host=/cloudsql/project:region:instance"
-  auth_method: gcp_iam
-  gcp_iam:
-    enabled: true
-```
-
-### Self-Managed PostgreSQL
-
-```yaml
-customer_id: "cust_123"
-database_id: "db_onprem_prod"
-
-postgres:
-  conn_string: "postgres://pgcollector@db.example.com:5432/postgres?sslmode=verify-full"
-  auth_method: cert
-  tls:
-    mode: verify-full
-    ca_file: /etc/pg-collector/certs/ca.crt
-    cert_file: /etc/pg-collector/certs/client.crt
-    key_file: /etc/pg-collector/certs/client.key
-```
-
----
-
-## Sampling Interval Guidelines
-
-Intervals vary by subscription tier:
-
-| Sampler | Starter | Pro | Enterprise |
-|---------|---------|-----|------------|
-| Activity | 30s | 10s | 1s |
-| Database | 30s | 10s | 10s |
-| Statements | 60s | 30s | 30s |
-| Replication | 30s | 5s | 1s |
-
-Higher-frequency sampling provides more granular insights but generates more data.
+> **Note:** Password auth only works in demo builds (`BUILD_MODE=demo`).
 
 ---
 
 ## Multiple Databases
 
-To monitor multiple databases, run one PG Collector instance per database. Each instance needs:
-- Unique `database_id`
-- Its own configuration file
-- Separate health endpoint port (if on same host)
-
-Example for multiple instances on the same host:
-
-**Instance 1:** `/etc/pg-collector/db1.yaml`
 ```yaml
-customer_id: "cust_123"
-database_id: "db_prod_01"
-http:
-  address: ":8080"
-postgres:
-  conn_string: "postgres://pgcollector@db1.example.com:5432/postgres"
-  # ...
-```
+databases:
+  - name: Production Primary
+    postgres:
+      conn_string: "postgres://pgcollector@db1:5432/postgres?sslmode=verify-full"
 
-**Instance 2:** `/etc/pg-collector/db2.yaml`
-```yaml
-customer_id: "cust_123"
-database_id: "db_prod_02"
-http:
-  address: ":8081"
-postgres:
-  conn_string: "postgres://pgcollector@db2.example.com:5432/postgres"
-  # ...
+  - name: Production Replica
+    postgres:
+      conn_string: "postgres://pgcollector@db2:5432/postgres?sslmode=verify-full"
 ```
 
 ---
 
-## Demo Mode Configuration
+## Cloud Examples
 
-For quick evaluation without certificate setup, use the demo build.
-
-### Demo Configuration Example
+### AWS RDS
 
 ```yaml
-customer_id: "demo"
-database_id: "my_db"
-output_mode: local_only
-
-postgres:
-  conn_string: "postgres://user:password@localhost:5432/postgres"
-  auth_method: password  # Only in demo builds
-
-local:
-  enabled: true
-  path: ./output
-  format: jsonl
-  split_by_metric_type: true
+databases:
+  - name: RDS Production
+    postgres:
+      conn_string: "postgres://pgcollector@mydb.xxx.us-east-1.rds.amazonaws.com:5432/postgres"
+      auth_method: aws_iam
+      aws_iam:
+        enabled: true
+        region: us-east-1
+      tls:
+        mode: verify-full
+        ca_file: /etc/pg-collector/certs/rds-ca-bundle.pem
 ```
 
-### Demo Output Options
-
-| Output Mode | Description |
-|-------------|-------------|
-| `local_only` | Write metrics to local filesystem |
-| `timescale` | Write metrics to TimescaleDB (Starter tier) |
-| `timescale_with_local` | TimescaleDB + local backup (Pro tier) |
-
-### Local Output Configuration
+### GCP Cloud SQL
 
 ```yaml
-local:
-  enabled: true
-  path: ./output              # Output directory
-  format: jsonl               # jsonl or parquet
-  rotate_interval: 1h         # File rotation interval
-  max_file_size: 100MB        # Max file size before rotation
-  flush_interval: 10s         # Buffer flush interval
-  split_by_metric_type: true  # Separate files per metric type
+databases:
+  - name: Cloud SQL Production
+    postgres:
+      conn_string: "postgres://pgcollector@/postgres?host=/cloudsql/project:region:instance"
+      auth_method: gcp_iam
+      gcp_iam:
+        enabled: true
 ```
-
-### TimescaleDB Output Configuration (Starter/Pro)
-
-```yaml
-output_mode: timescale
-
-timescale:
-  enabled: true
-
-  # Connection to TimescaleDB server
-  conn_string: "postgres://user:pass@timescale-host:5432/postgres?sslmode=disable"
-
-  # Isolated metrics database (auto-created, default: burnside_metrics)
-  database_name: burnside_metrics
-
-  # Batch settings
-  batch_size: 100
-  flush_interval: 5s
-```
-
-> **Database Isolation**: Metrics are stored in a dedicated `burnside_metrics` database, completely isolated from your application databases. The collector creates this database automatically.
-
-### Demo Limitations
-
-| Feature | Demo | Production |
-|---------|------|------------|
-| Password auth | Allowed | Not supported |
-| mTLS/IAM auth | Supported | Required |
-| Local output | Yes | Yes |
-| S3 output | Yes | Yes |
-| TimescaleDB output | Yes | Yes |
-| Cloud output | No | Yes |
-
-For production deployments, use the standard build with mTLS or IAM authentication.
 
 ---
 
 ## Related Documentation
 
+- [Quick Start](quick-start.md) - Get started quickly
 - [Security Guide](security.md) - TLS and authentication
-- [AWS Setup](aws-setup.md) - RDS configuration
-- [GCP Setup](gcp-setup.md) - Cloud SQL configuration
-- [Troubleshooting](troubleshooting.md) - Common issues
+- [Monitoring](monitoring.md) - Health endpoints

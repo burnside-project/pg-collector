@@ -115,15 +115,20 @@ metadata:
 ### With Cloud SQL Proxy (Recommended)
 
 ```yaml
-customer_id: "your_customer_id"
-database_id: "db_cloudsql_prod"
+api_key: "${API_KEY}"
 
-postgres:
+databases:
+  - name: Cloud SQL Production
+    postgres:
   conn_string: "postgres://pg-collector@PROJECT_ID.iam@/postgres?host=/cloudsql/PROJECT_ID:REGION:INSTANCE_NAME"
   auth_method: gcp_iam
   gcp_iam:
     enabled: true
+
+# Direct connection config also supported (see below)
 ```
+
+See [Configuration Guide](configuration.md) for all options.
 
 ### Direct Connection
 
@@ -155,10 +160,14 @@ cloud-sql-proxy PROJECT_ID:REGION:INSTANCE_NAME &
 
 ---
 
-## Step 8: Test Connection
+## Step 8: Verify Configuration
 
 ```bash
-pg-collector --config /etc/pg-collector/config.yaml --test
+# Validate config syntax
+pg-collector --check-config --config /etc/pg-collector/config.yaml
+
+# Test by running (Ctrl+C to stop after verifying connection)
+pg-collector --config /etc/pg-collector/config.yaml
 ```
 
 ---

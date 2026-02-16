@@ -1,24 +1,22 @@
 # Monitoring Guide
 
-**Keep an eye on the collector that keeps an eye on your database.**
-
 Monitor PG Collector health and performance with built-in endpoints and Prometheus integration.
 
 ## Health Endpoints
 
-PG Collector exposes HTTP endpoints for monitoring:
-
 | Endpoint | Purpose |
 |----------|---------|
-| `GET /health` | Basic health check (for load balancers) |
-| `GET /status` | Detailed status information |
+| `GET /health` | Component health check |
+| `GET /status` | Detailed status and buffer info |
+| `GET /livez` | Kubernetes liveness probe |
+| `GET /readyz` | Kubernetes readiness probe |
 | `GET /metrics` | Prometheus metrics |
+| `GET /version` | Build version information |
+| `GET /watchdog` | Watchdog health status |
 
 ---
 
 ## Health Check
-
-### Basic Health
 
 ```bash
 curl http://localhost:8080/health
@@ -27,13 +25,32 @@ curl http://localhost:8080/health
 Response:
 ```json
 {
-  "status": "healthy",
-  "postgres": "connected",
-  "output": "ok"
+  "status": "ok",
+  "components": {
+    "postgres": {
+      "status": "ok"
+    },
+    "output": {
+      "status": "ok"
+    }
+  },
+  "timestamp": "2026-01-31T12:00:00Z"
 }
 ```
 
-### Detailed Status
+**Status values:**
+- `ok` - All components healthy
+- `degraded` - One or more components unhealthy
+
+**Component status values:**
+- `ok` - Connected and working
+- `down` - Connection failed
+- `degraded` - Circuit breaker open
+- `unknown` - Not configured
+
+---
+
+## Status Endpoint
 
 ```bash
 curl http://localhost:8080/status
@@ -42,36 +59,56 @@ curl http://localhost:8080/status
 Response:
 ```json
 {
-  "status": "healthy",
-  "uptime": "2h15m30s",
-  "version": "0.1.0",
-  "postgres": {
-    "status": "connected",
-    "host": "db.example.com:5432",
-    "latency_ms": 2
-  },
-  "cloud": {
-    "status": "connected",
-    "last_upload": "2025-01-04T12:00:00Z"
-  },
-  "buffer": {
-    "memory_used": 1024,
-    "memory_max": 52428800,
-    "disk_used": 0,
-    "disk_max": 524288000
-  },
-  "sampling": {
-    "last_sample": "2025-01-04T12:00:01Z",
-    "samples_collected": 12500
-  }
+  "buffer_depth": 150,
+  "last_push_time": "2026-01-31T12:00:00Z",
+  "postgres_connections": 2,
+  "is_draining": false
 }
+```
+
+The status endpoint returns current buffer depth, last successful output time, active PostgreSQL connections, and whether the disk buffer is currently draining.
+
+---
+
+## Kubernetes Probes
+
+### Liveness Probe
+
+```bash
+curl http://localhost:8080/livez
+```
+
+Returns `200 OK` if alive, `503` if dead components detected.
+
+### Readiness Probe
+
+```bash
+curl http://localhost:8080/readyz
+```
+
+Returns `200 OK` if ready, `503` if required components are not connected.
+
+### Pod Configuration
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /livez
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
 ```
 
 ---
 
 ## Prometheus Metrics
-
-### Endpoint
 
 ```bash
 curl http://localhost:8080/metrics
@@ -79,70 +116,213 @@ curl http://localhost:8080/metrics
 
 ### Key Metrics
 
-#### Connection Metrics
-
 | Metric | Type | Description |
 |--------|------|-------------|
-| `pg_collector_postgres_connected` | Gauge | 1 if connected, 0 otherwise |
-| `pg_collector_postgres_latency_seconds` | Histogram | Query latency |
-| `pg_collector_postgres_errors_total` | Counter | Connection/query errors |
-
-#### Buffer Metrics
-
-| Metric | Type | Description |
-|--------|------|-------------|
-| `pg_collector_buffer_memory_bytes` | Gauge | Memory buffer usage |
-| `pg_collector_buffer_disk_bytes` | Gauge | Disk buffer usage |
-| `pg_collector_buffer_overflow_total` | Counter | Memory to disk overflows |
-
-#### Output Metrics
-
-| Metric | Type | Description |
-|--------|------|-------------|
-| `pg_collector_output_success_total` | Counter | Successful uploads |
-| `pg_collector_output_errors_total` | Counter | Failed uploads |
-| `pg_collector_output_bytes_total` | Counter | Bytes uploaded |
-| `pg_collector_output_latency_seconds` | Histogram | Upload latency |
-
-#### Sampling Metrics
-
-| Metric | Type | Description |
-|--------|------|-------------|
+| `pg_collector_up` | Gauge | Whether the collector is running (1 = up, 0 = down) |
+| `pg_collector_uptime_seconds` | Gauge | Time since collector started |
 | `pg_collector_samples_total` | Counter | Total samples collected |
 | `pg_collector_sample_errors_total` | Counter | Sample collection errors |
+| `pg_collector_buffer_memory_bytes` | Gauge | Memory buffer usage |
+| `pg_collector_buffer_disk_bytes` | Gauge | Disk buffer usage |
+| `pg_collector_output_success_total` | Counter | Successful outputs |
+| `pg_collector_output_errors_total` | Counter | Failed outputs |
+| `pg_collector_circuit_breaker_state` | Gauge | Circuit breaker state (0 = closed, 1 = half-open, 2 = open) |
+| `pg_collector_pg_query_duration_seconds` | Histogram | PostgreSQL query execution time |
+| `pg_collector_panics_recovered_total` | Counter | Total recovered panics |
+
+### Scrape Config
+
+```yaml
+scrape_configs:
+  - job_name: 'pg-collector'
+    static_configs:
+      - targets: ['pg-collector:8080']
+    scrape_interval: 30s
+    metrics_path: /metrics
+```
 
 ---
 
-## Health Check Integration
+## Alerting Rules
 
-### Kubernetes
+### Recommended Alerts
 
 ```yaml
-livenessProbe:
-  httpGet:
-    path: /health
-    port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 30
+groups:
+  - name: pg-collector
+    rules:
+      - alert: PGCollectorDown
+        expr: up{job="pg-collector"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PG Collector is down"
+          description: "PG Collector has been unreachable for 5 minutes."
 
-readinessProbe:
-  httpGet:
-    path: /health
-    port: 8080
-  initialDelaySeconds: 5
-  periodSeconds: 10
+      - alert: PGCollectorPostgresDown
+        expr: pg_collector_circuit_breaker_state{component="postgres"} == 2
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL connection circuit breaker is open"
+          description: "PG Collector cannot reach PostgreSQL. Circuit breaker is open."
+
+      - alert: PGCollectorDiskBufferActive
+        expr: pg_collector_buffer_disk_bytes > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk buffer is active"
+          description: "Samples are spilling to disk buffer, indicating output delivery issues."
+
+      - alert: PGCollectorNoSamples
+        expr: rate(pg_collector_samples_total[5m]) == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No samples collected"
+          description: "PG Collector has not collected any samples in the last 10 minutes."
+
+      - alert: PGCollectorDegraded
+        expr: pg_collector_health_status != 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PG Collector is degraded"
+          description: "One or more components are unhealthy."
+
+      - alert: PGCollectorBufferHigh
+        expr: pg_collector_buffer_disk_bytes > 100000000
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk buffer exceeds 100 MB"
+          description: "Disk buffer is growing, indicating persistent output delivery failure."
 ```
 
-### AWS ALB/NLB
+### Prometheus Operator ServiceMonitor
 
-Target group health check:
-- **Path:** `/health`
-- **Port:** `8080`
-- **Healthy threshold:** 2
-- **Unhealthy threshold:** 3
-- **Interval:** 30 seconds
+If you use the Prometheus Operator, create a `ServiceMonitor` to auto-discover PG Collector:
 
-### Docker Compose
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: pg-collector
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: pg-collector
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+```
+
+---
+
+## Logging
+
+### Configuration
+
+```yaml
+log:
+  level: info    # debug, info, warn, error
+  format: json   # json, console
+```
+
+### View Logs
+
+```bash
+# Systemd
+journalctl -u pg-collector -f
+
+# Docker
+docker logs -f pg-collector
+
+# Kubernetes
+kubectl logs -f deployment/pg-collector
+```
+
+### Structured Log Format
+
+When `format: json` is set (the default), PG Collector outputs structured JSON logs:
+
+```json
+{"level":"info","ts":"2026-01-15T10:30:00Z","msg":"sample collected","sampler":"activity","database":"prod-db-1","duration_ms":12}
+{"level":"info","ts":"2026-01-15T10:30:05Z","msg":"sync complete","samples":847,"latency_ms":120}
+{"level":"warn","ts":"2026-01-15T10:31:00Z","msg":"entering grace mode","reason":"key service unreachable"}
+```
+
+### Log Levels
+
+| Level | Use |
+|-------|-----|
+| `debug` | Detailed diagnostic information (verbose, use for troubleshooting) |
+| `info` | Normal operational events |
+| `warn` | Recoverable issues that may need attention |
+| `error` | Failures that prevent normal operation |
+
+### Important Log Patterns
+
+Watch for these log messages to understand collector behavior:
+
+| Pattern | Level | Meaning |
+|---------|-------|---------|
+| `circuit breaker opened` | WARN | Too many failures to a component; retries paused |
+| `circuit breaker closed` | INFO | Component recovered; normal operation resumed |
+| `disk buffer activated` | WARN | Memory buffer full, samples writing to disk |
+| `disk buffer drained` | INFO | Disk buffer emptied, back to memory-only |
+| `device activated` | INFO | Activation successful, collecting started |
+| `entering grace mode` | WARN | Platform unreachable, using cached configuration |
+| `grace period expired` | ERROR | Collection stopped; needs reconnection |
+| `sync complete` | INFO | Successful data delivery to platform |
+
+---
+
+## Watchdog
+
+The watchdog monitors collector health and detects stuck components.
+
+```bash
+curl http://localhost:8080/watchdog
+```
+
+Response:
+
+```json
+{
+  "status": "ok",
+  "components": {
+    "scheduler": { "status": "ok", "last_tick": "2026-01-15T10:30:00Z" },
+    "buffer": { "status": "ok", "depth": 150 },
+    "output": { "status": "ok", "last_success": "2026-01-15T10:29:55Z" },
+    "postgres": { "status": "ok", "connections": 2 }
+  },
+  "uptime_seconds": 86400
+}
+```
+
+**Component states:**
+
+| State | Description |
+|-------|-------------|
+| `ok` | Component is healthy and operating normally |
+| `degraded` | Component is operational but experiencing issues (e.g., circuit breaker half-open) |
+| `down` | Component has failed (e.g., PostgreSQL unreachable) |
+| `unknown` | Component is not configured or has not reported status |
+
+---
+
+## Docker Health Check
 
 ```yaml
 services:
@@ -156,170 +336,11 @@ services:
 
 ---
 
-## Prometheus Configuration
+## AWS ALB/NLB
 
-### Scrape Config
-
-```yaml
-scrape_configs:
-  - job_name: 'pg-collector'
-    static_configs:
-      - targets: ['pg-collector:8080']
-    scrape_interval: 30s
-    metrics_path: /metrics
-```
-
-### Kubernetes ServiceMonitor
-
-```yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: pg-collector
-spec:
-  selector:
-    matchLabels:
-      app: pg-collector
-  endpoints:
-    - port: http
-      path: /metrics
-      interval: 30s
-```
-
----
-
-## Alerting Rules
-
-### Prometheus Alerts
-
-```yaml
-groups:
-  - name: pg-collector
-    rules:
-      - alert: PGCollectorDown
-        expr: up{job="pg-collector"} == 0
-        for: 5m
-        labels:
-          severity: critical
-        annotations:
-          summary: "PG Collector is down"
-
-      - alert: PGCollectorPostgresDisconnected
-        expr: pg_collector_postgres_connected == 0
-        for: 2m
-        labels:
-          severity: critical
-        annotations:
-          summary: "PG Collector lost database connection"
-
-      - alert: PGCollectorBufferHigh
-        expr: pg_collector_buffer_disk_bytes > 100000000
-        for: 10m
-        labels:
-          severity: warning
-        annotations:
-          summary: "PG Collector disk buffer > 100MB"
-
-      - alert: PGCollectorOutputErrors
-        expr: rate(pg_collector_output_errors_total[5m]) > 0.1
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "PG Collector output errors detected"
-```
-
----
-
-## Logging
-
-### Log Levels
-
-| Level | Description |
-|-------|-------------|
-| `debug` | Verbose debugging information |
-| `info` | Normal operational messages |
-| `warn` | Warning conditions |
-| `error` | Error conditions |
-
-### Configuration
-
-```yaml
-log:
-  level: info
-  format: json
-  output: stdout
-```
-
-### Log Format (JSON)
-
-```json
-{
-  "time": "2025-01-04T12:00:00Z",
-  "level": "info",
-  "msg": "Sample collected",
-  "sampler": "activity",
-  "duration_ms": 15
-}
-```
-
-### View Logs
-
-```bash
-# Systemd
-sudo journalctl -u pg-collector -f
-
-# Docker
-docker logs -f pg-collector
-
-# Kubernetes
-kubectl logs -f deployment/pg-collector
-```
-
----
-
-## Troubleshooting
-
-### Collector Not Healthy
-
-1. Check logs for errors:
-   ```bash
-   sudo journalctl -u pg-collector -n 100
-   ```
-
-2. Test database connection:
-   ```bash
-   pg-collector --config /etc/pg-collector/config.yaml --test
-   ```
-
-3. Check cloud connectivity
-
-### High Buffer Usage
-
-Buffer filling up indicates connectivity issues:
-
-1. Check cloud status in `/status`
-2. Verify network connectivity to the Burnside cloud (AWS + GCP)
-3. Check firewall and network rules
-4. Review error logs
-
-### Missing Metrics
-
-If Prometheus isn't scraping:
-
-1. Verify endpoint is accessible:
-   ```bash
-   curl http://localhost:8080/metrics
-   ```
-
-2. Check firewall allows port 8080
-
-3. Verify Prometheus scrape config
-
----
-
-## Related Documentation
-
-- [Troubleshooting](troubleshooting.md)
-- [Configuration](configuration.md)
-- [CLI Reference](cli-reference.md)
+Target group health check:
+- **Path:** `/health`
+- **Port:** `8080`
+- **Healthy threshold:** 2
+- **Unhealthy threshold:** 3
+- **Interval:** 30 seconds
