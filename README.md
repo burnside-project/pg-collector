@@ -37,7 +37,7 @@ pg-collector is a lightweight edge compute agent that extracts PostgreSQL teleme
 
 **Why pg-collector is not just another observation tool?**
 
-pg-collector backend continuously distill raw database telemetry into long-running trend features. The longer a customer is on the platform, the richer those trends become — and the smarter our AI reasoning gets. The data grows, but the intelligence compounds.
+pg-collector backend continuously distill raw database telemetry into long-running trend analysis features. The longer a customer is on the platform, the richer those trends become — and the smarter our AI reasoning agent gets. The data grows, but the intelligence compounds.
 
 **Single binary. Zero dependencies. 5-minute setup.**
 
@@ -54,7 +54,7 @@ pg-collector backend continuously distill raw database telemetry into long-runni
 
 ## Two Editions
 
-PG Collector is available in two editions:
+pg-collector is available in two editions:
 
 ### Demo Edition (Free)
 
@@ -65,20 +65,23 @@ PG Collector is available in two editions:
 - Cut and Paste the outputs from pg-collector to your local AI Chat Windows
 - Core PostgreSQL samplers: activity, database, and statements ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))
 - Example Prompt is provided for instant analysis
-- Perfect for evaluation, learning, and local development
+- Perfect for evaluation, learning, and local deployment
 
 ### Commercial Edition (Subscription)
 
-> **Everything in Demo, plus the full power of AWS or GCP Cloud**
+> **Everything in Demo, plus the full power of AWS or GCP Cloud services**
 
 - **Up to 12 PostgreSQL metric samplers** — activity, performance, replication, WAL, locks, vacuum, bloat, and more
 - **AI-powered health reports** with prescriptions and root cause analysis
+- **No Root Account needed just "pg_monitor"**
+- **No special function or sp. We use native postgres observability tools ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))**
+- **Intentionally designed to be non-intrusive in your current postgres**
 - **Predictive analytics** and anomaly detection
 - **Real-time streaming** to AWS + GCP Multi-Tenant or Single-Tenant Cloud
 - **Interactive health dashboard** with configuration audit
 - **PII detection**, audit logging, and query masking
 - **Multi-database monitoring** — scale from one database to unlimited
-- **Offline resilience** — continues collecting during network outages
+- **Offline resilience** — continues collecting during network outages 
 - **Enterprise authentication** — mTLS, AWS IAM, GCP IAM Only
 - **Flexible deployment** — systemd, Docker, Kubernetes
 - **Dedicated support** — email, priority, and SLA tiers available
@@ -109,15 +112,15 @@ This standalone local testing tool that lets you analyze pg-collector telemetry 
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Quick Start (Demo)
+## Quick Start (Demo)
 Follow the README.md enclosed in the download
 
 
-### Test with your own LLM Chat Application (ChatGPT , Claude - We provide you demo Prompt but feel free to use your own prompt)
+## Test with your own LLM Chat Application (ChatGPT , Claude - We provide you demo Prompt but feel free to use your own prompt)
 
 ![5.png](docs/assets/5.png)
 
-### What Prompts are Included?
+## What Prompts are Included?
 
 | Prompt | Use Case |
 |--------|----------|
@@ -127,7 +130,7 @@ Follow the README.md enclosed in the download
 | `04-capacity-planning.md` | Resource utilization and scaling |
 | `05-quick-diagnosis.md` | Fast 30-second triage |
 
-### Demo vs. Commercial
+## Demo vs. Commercial
 
 | Capability | Demo (Free) | Commercial (Subscription) |
 |------------|:-----------:|:-------------------------:|
@@ -159,7 +162,7 @@ Download the latest release from the [Releases page](https://github.com/burnside
 | **macOS** | Apple Silicon | `pg-collector-darwin-arm64.tar.gz` |
 | **Windows** | x86_64 | `pg-collector-windows-amd64.zip` |
 
-### Verify Download
+## Verify Download
 
 Each release includes a `checksums.txt` file. After downloading:
 
