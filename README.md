@@ -39,7 +39,13 @@ pg-collector is a lightweight edge compute agent that extracts PostgreSQL teleme
 
 pg-collector backend continuously distill raw database telemetry into long-running trend analysis features. The longer a customer is on the platform, the richer those trends become — and the smarter our AI reasoning agent gets. The data grows, but the intelligence compounds.
 
-**Single binary. Zero dependencies. 5-minute setup.**
+**Design Principals**
+
+- Act like an IoT sensor - Lightweight edge device that observes and transmits, never interferes.
+- Never lose data  -  Memory ring buffer overflows to SQLite on disk. When the network returns, it drains automatically in FIFO order.
+- Resilient by default — Works offline with local storage for up to 72 hours.
+- Single binary, zero dependencies — No JVM, no Python runtime, no agents to install. One YAML config, one binary, runs anywhere — systemd, Docker, Kubernetes, bare metal.
+- Intelligence compounds over time — Raw telemetry feeds long-running trend analysis. The longer you collect, the richer the patterns, the smarter the AI predictions become.
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
@@ -249,7 +255,7 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 
 ## Features
 
-**Connects to Control Plane like an Edge Compute**
+**Connects to Control Plane like an Edge Device**
 ![11.png](docs/assets/11.png)
 
 **mTLS authentication to your control plane**
