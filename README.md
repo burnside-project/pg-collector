@@ -60,26 +60,26 @@ pg-collector is available in two editions:
 
 > **Try it locally—no cloud account required.**
 
-- Single binary, zero external dependencies
-- Runs locally; all output stays on your machine
-- Cut and Paste the outputs from pg-collector to your local AI Chat Windows
-- Core PostgreSQL samplers: activity, database, and statements ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))
-- Example Prompt is provided for instant analysis
-- Perfect for evaluation, learning, and local deployment
+- **Single binary** - zero external dependencies
+- **Runs locally** - all output stays on your machine
+- **Cut and Paste** - the outputs from pg-collector to your local AI Chat Windows
+- **Core PostgresSQL** - samplers activity, database, and statements ([PostgresSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))
+- **Example Prompt** - is provided for instant analysis
+- **Perfect for evaluation** - learning, and local deployment
 
 ### Commercial Edition (Subscription)
 
 > **Everything in Demo, plus the full power of AWS or GCP Cloud services**
 
 - **Up to 12 PostgreSQL metric samplers** — activity, performance, replication, WAL, locks, vacuum, bloat, and more
-- **AI-powered health reports** with prescriptions and root cause analysis
-- **No Root Account needed just "pg_monitor"**
-- **No special function or sp. We use native postgres observability tools ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))**
-- **Intentionally designed to be non-intrusive in your current postgres**
-- **Predictive analytics** and anomaly detection
-- **Real-time streaming** to AWS + GCP Multi-Tenant or Single-Tenant Cloud
-- **Interactive health dashboard** with configuration audit
-- **PII detection**, audit logging, and query masking
+- **AI-powered health reports** - with prescriptions and root cause analysis
+- **No Root Account** - just "pg_monitor"
+- **No special function or sp** - we use native postgres observability tools ([PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page))
+- **Intentionally designed** - non-intrusive in your current postgres
+- **Predictive analytics** - anomaly detection
+- **Real-time streaming** - to AWS + GCP Multi-Tenant or Single-Tenant Cloud
+- **Interactive health dashboard** - with configuration audit
+- **PII detection** - audit logging, and query masking
 - **Multi-database monitoring** — scale from one database to unlimited
 - **Offline resilience** — continues collecting during network outages 
 - **Enterprise authentication** — mTLS, AWS IAM, GCP IAM Only
