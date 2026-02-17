@@ -1,4 +1,4 @@
-<h1 align="center">PG Collector</h1>
+<h1 align="center">pg-collector</h1>
 
 <p align="center">
   <strong>From Signals to Prediction</strong><br>
@@ -29,9 +29,15 @@
 
 ## Overview
 
-**Stop reacting to database issues—start predicting them.**
+### Stop reacting to database issues—start predicting them using AI agents.
 
-PG Collector is a lightweight edge compute agent that extracts PostgreSQL telemetry and delivers it to configurable destinations—locally for evaluation, or streamed to cloud platform where AI LLM analyzes patterns and predicts issues before they impact your users.
+**What is pg-collector?**
+
+pg-collector is a lightweight edge compute agent that extracts PostgreSQL telemetry and delivers it to configurable destinations—locally for evaluation, or streamed to cloud platform where AI LLM analyzes patterns and predicts issues before they impact your users.
+
+**Why pg-collector is not just another observation tool?**
+
+pg-collector backend continuously distill raw database telemetry into long-running trend features. The longer a customer is on the platform, the richer those trends become — and the smarter our AI reasoning gets. The data grows, but the intelligence compounds.
 
 **Single binary. Zero dependencies. 5-minute setup.**
 
@@ -68,7 +74,7 @@ PG Collector is available in two editions:
 - **Up to 12 PostgreSQL metric samplers** — activity, performance, replication, WAL, locks, vacuum, bloat, and more
 - **AI-powered health reports** with prescriptions and root cause analysis
 - **Predictive analytics** and anomaly detection
-- **Real-time streaming** to Burnside Cloud
+- **Real-time streaming** to AWS + GCP Multi-Tenant or Single-Tenant Cloud
 - **Interactive health dashboard** with configuration audit
 - **PII detection**, audit logging, and query masking
 - **Multi-database monitoring** — scale from one database to unlimited
@@ -239,7 +245,6 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 ---
 
 ## Features
-**AI Agent for Analysis + Recommended Action**
 
 **Connects to Control Plane like an Edge Compute**
 ![11.png](docs/assets/11.png)
@@ -417,7 +422,7 @@ This software is licensed under the **Burnside Project Community Freeware Licens
 
 For commercial licensing inquiries, contact [licensing@burnsideproject.ai](mailto:licensing@burnsideproject.ai).
 
-See [LICENSE](LICENSE.md) for the complete license text.
+See [LICENSE](LICENSE.md) for the complete license text
 
 ---
 

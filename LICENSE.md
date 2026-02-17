@@ -1,6 +1,6 @@
 # Burnside Project Dual License Agreement
 
-Copyright (c) 2026 Burnside Project LLC  
+Copyright (c) 2026 Burnside Project LLC
 All Rights Reserved.
 
 ---
@@ -29,10 +29,10 @@ IF YOU DO NOT AGREE, DO NOT INSTALL OR USE THE SOFTWARE.
 
 Licensor grants you a limited, non-exclusive, non-transferable, revocable license to use the Community Edition free of charge for:
 
-- Personal use  
-- Evaluation use  
-- Internal business use (non-commercial resale)  
-- Development and testing  
+- Personal use
+- Evaluation use
+- Internal business use (non-commercial resale)
+- Development and testing
 
 This license does **not** grant ownership rights.
 
@@ -54,7 +54,7 @@ All rights not expressly granted are reserved.
 
 ### 2.3 Not Open Source
 
-This Software is proprietary and confidential.  
+This Software is proprietary and confidential.
 It is **NOT** licensed under any open-source license.
 
 ### 2.4 No Warranty
@@ -63,11 +63,11 @@ THE SOFTWARE IS PROVIDED **“AS IS”** WITHOUT WARRANTIES OF ANY KIND.
 
 Licensor disclaims all warranties including:
 
-- Merchantability  
-- Fitness for a particular purpose  
-- Non-infringement  
-- Accuracy of telemetry or AI output  
-- Continuous availability  
+- Merchantability
+- Fitness for a particular purpose
+- Non-infringement
+- Accuracy of telemetry or AI output
+- Continuous availability
 
 ### 2.5 Limitation of Liability
 
@@ -75,12 +75,12 @@ TO THE MAXIMUM EXTENT PERMITTED BY LAW:
 
 LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING:
 
-- Data loss  
-- Business interruption  
-- Database corruption  
-- Security breaches  
-- Lost revenue  
-- Cloud or LLM service costs  
+- Data loss
+- Business interruption
+- Database corruption
+- Security breaches
+- Lost revenue
+- Cloud or LLM service costs
 
 Total liability, if any, shall not exceed **$100 USD**.
 
@@ -92,11 +92,11 @@ Total liability, if any, shall not exceed **$100 USD**.
 
 Use of the Software for:
 
-- Revenue-generating services  
-- SaaS offerings  
-- Resale or redistribution  
-- Managed database monitoring  
-- Multi-tenant commercial hosting  
+- Revenue-generating services
+- SaaS offerings
+- Resale or redistribution
+- Managed database monitoring
+- Multi-tenant commercial hosting
 
 requires a separate written **Enterprise License Agreement**.
 
@@ -106,11 +106,11 @@ requires a separate written **Enterprise License Agreement**.
 
 Enterprise customers may receive:
 
-- Expanded usage rights  
-- Support SLAs  
-- Feature unlocks  
-- Deployment rights  
-- Custom integration rights  
+- Expanded usage rights
+- Support SLAs
+- Feature unlocks
+- Deployment rights
+- Custom integration rights
 
 All Enterprise rights are governed exclusively by the signed Enterprise Agreement.
 
@@ -124,16 +124,16 @@ If the Software includes Enterprise features enabled on a trial basis, such feat
 
 At expiration:
 
-- Enterprise features will automatically disable  
-- Continued commercial use requires payment  
+- Enterprise features will automatically disable
+- Continued commercial use requires payment
 
 ### 4.2 Automatic Conversion Requirement
 
 If You:
 
-- Use Enterprise features beyond the trial period  
-- Deploy the Software in a commercial production environment  
-- Exceed Community usage limitations  
+- Use Enterprise features beyond the trial period
+- Deploy the Software in a commercial production environment
+- Exceed Community usage limitations
 
 You must obtain a paid Enterprise License.
 
@@ -159,11 +159,11 @@ No rights are granted by implication, estoppel, or otherwise beyond those expres
 
 You are solely responsible for:
 
-- All telemetry collected  
-- Compliance with data protection laws  
-- Third-party API usage  
-- AI-generated recommendations  
-- Production deployment risks  
+- All telemetry collected
+- Compliance with data protection laws
+- Third-party API usage
+- AI-generated recommendations
+- Production deployment risks
 
 This Software does **not** provide professional database, legal, financial, or security advice.
 
@@ -173,10 +173,10 @@ This Software does **not** provide professional database, legal, financial, or s
 
 You agree to indemnify and hold harmless Burnside Project LLC from any claims, damages, liabilities, or expenses arising from:
 
-- Your use of the Software  
-- Commercial misuse  
-- Regulatory violations  
-- Data privacy failures  
+- Your use of the Software
+- Commercial misuse
+- Regulatory violations
+- Data privacy failures
 
 ---
 
@@ -186,9 +186,9 @@ This license terminates automatically if you violate any term.
 
 Upon termination you must:
 
-- Cease all use  
-- Destroy all copies  
-- Remove all deployments  
+- Cease all use
+- Destroy all copies
+- Remove all deployments
 
 Licensor may disable access to updates or services upon termination.
 
@@ -208,16 +208,16 @@ The Software is proprietary technology forming part of Licensor’s core intelle
 
 Nothing in this license:
 
-- Transfers ownership  
-- Grants patent rights  
-- Permits derivative works  
-- Creates partnership or joint venture  
+- Transfers ownership
+- Grants patent rights
+- Permits derivative works
+- Creates partnership or joint venture
 
 Unauthorized commercial use may result in:
 
-- Immediate license revocation  
-- Financial damages  
-- Injunctive relief  
+- Immediate license revocation
+- Financial damages
+- Injunctive relief
 
 ---
 
@@ -231,12 +231,12 @@ Enterprise customers are governed exclusively by their signed agreement.
 
 ## Plain-English Summary (Non-Binding)
 
-- Free for community use  
-- Not open source  
-- No redistribution or resale  
-- Enterprise license required for commercial use  
-- Trial converts to paid  
-- No warranty / no liability  
-- Strong IP protection  
+- Free for community use
+- Not open source
+- No redistribution or resale
+- Enterprise license required for commercial use
+- Trial converts to paid
+- No warranty / no liability
+- Strong IP protection
 
 ---
