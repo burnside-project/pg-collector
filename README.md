@@ -44,6 +44,7 @@ pg-collector backend continuously distill raw database telemetry into long-runni
 - Act like an IoT sensor - Lightweight edge device that observes and transmits, never interferes.
 - Never lose data  -  Memory ring buffer overflows to SQLite on disk. When the network returns, it drains automatically in FIFO order.
 - Resilient by default — Works offline with local storage for up to 72 hours.
+- Zero Trust - No UID/Password. Only mTLS, AWS/GCP IAM required
 - Single binary, zero dependencies — No JVM, no Python runtime, no agents to install. One YAML config, one binary, runs anywhere — systemd, Docker, Kubernetes, bare metal.
 - Intelligence compounds over time — Raw telemetry feeds long-running trend analysis. The longer you collect, the richer the patterns, the smarter the AI predictions become.
 
