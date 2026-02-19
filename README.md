@@ -42,7 +42,7 @@ pg-collector backend continuously distill raw database telemetry into long-runni
 **Design Principals**
 
 - Act like an IoT sensor - Lightweight edge device that observes and transmits, never interferes.
-- Never lose data  -  Memory ring buffer overflows to SQLite on disk. When the network returns, it drains automatically in FIFO order.
+- Never lose data  -  Samples flow through an in-memory ring buffer into DuckDB. If DuckDB is busy, samples spill to SQLite and drain back automatically.
 - Resilient by default — Works offline with local storage for up to 72 hours.
 - Zero Trust - No UID/Password. Only mTLS, AWS/GCP IAM required
 - Single binary, zero dependencies — No JVM, no Python runtime, no agents to install. One YAML config, one binary, runs anywhere — systemd, Docker, Kubernetes, bare metal.
@@ -307,7 +307,7 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 | Guarantee | What It Means |
 |-----------|---------------|
 | **Memory Safe** | Configurable ceiling with automatic management—never runaway |
-| **Network Resilient** | Local buffering survives outages—zero data loss |
+| **Network Resilient** | Hybrid ingestion pipeline with SQLite overflow survives outages—zero data loss |
 | **Minimal Footprint** | Max 2 PostgreSQL connections, timeout-protected queries |
 | **Secure by Default** | mTLS or IAM auth—no passwords in config files |
 
