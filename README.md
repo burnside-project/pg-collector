@@ -47,6 +47,10 @@ pg-collector is a lightweight edge compute agent that extracts PostgreSQL teleme
 
 pg-collector backend continuously distill raw database telemetry into long-running trend analysis features. The longer a customer is on the platform, the richer those trends become — and the smarter our AI reasoning agent gets. The data grows, but the intelligence compounds.
 
+**What is the secret sauce**
+
+Deep, high-fidelity PostgreSQL telemetry collection — built lean, engineered for intelligence, and optimized for AI-driven diagnostics.
+
 **Design Principals**
 
 - Act like an IoT sensor - Lightweight edge device that observes and transmits, never interferes.
