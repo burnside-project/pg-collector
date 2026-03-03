@@ -276,6 +276,32 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 **AI-Generated Prescriptive Runbooks for Faster Resolution**
 ![12.png](docs/assets/12.png)
 
+**Predictive Risk Score from predictive ML model**
+![1.jpg](docs/assets/1.jpg)
+
+**Predictive Risk Score derived from grounding truth
+![2.jpg](docs/assets/2.jpg)
+
+**Predictive Risk Score derived from grounding truth
+![3.jpg](docs/assets/3.jpg)
+
+**Building State Machine from grounding truth
+![4.jpg](docs/assets/4.jpg)
+
+**Al Analysis**
+![5.jpg](docs/assets/5.jpg)
+
+**What is loaded vs Recommended**
+![7.jpg](docs/assets/7.jpg)
+
+**Complete matrix rolled up hourly**
+![8.jpg](docs/assets/8.jpg)
+
+**Aggregated Tiles (Hourly)**
+![9.jpg](docs/assets/9.jpg)
+
+**Daily Prediction with grounding truth**
+![10.jpg](docs/assets/10.jpg)
 
 **Detail Metrics**
 ![3.png](docs/assets/3.png)
