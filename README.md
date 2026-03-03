@@ -279,13 +279,13 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 **Predictive Risk Score from predictive ML model**
 ![1.jpg](docs/assets/1.jpg)
 
-**Predictive Risk Score derived from grounding truth
+**Predictive Risk Score derived from grounding truth**
 ![2.jpg](docs/assets/2.jpg)
 
-**Predictive Risk Score derived from grounding truth
+**Predictive Risk Score derived from grounding truth**
 ![3.jpg](docs/assets/3.jpg)
 
-**Building State Machine from grounding truth
+**Building State Machine from grounding truth**
 ![4.jpg](docs/assets/4.jpg)
 
 **Al Analysis**
