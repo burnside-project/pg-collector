@@ -275,7 +275,7 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 ![10.png](docs/assets/10.png)
 
 **AI Agent for Analysis + Recommended Action**
-![2.png](docs/assets/2.png)
+![12.jpg](docs/assets/12.jpg)
 
 **AI-Generated Prescriptive Runbooks for Faster Resolution**
 ![12.png](docs/assets/12.png)
