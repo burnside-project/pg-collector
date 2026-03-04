@@ -280,6 +280,9 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 **AI-Generated Prescriptive Runbooks for Faster Resolution**
 ![12.png](docs/assets/12.png)
 
+**Analyze what query is creating contention**
+![12.png](docs/assets/12.png)
+
 **Predictive Risk Score from predictive ML model**
 ![1.jpg](docs/assets/1.jpg)
 
