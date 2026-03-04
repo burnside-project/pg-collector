@@ -274,13 +274,10 @@ When connected to Burnside Project Cloud Engine, commercial subscribers get acce
 **mTLS authentication to your control plane**
 ![10.png](docs/assets/10.png)
 
-**AI Agent for Analysis + Recommended Action**
+**Analyze what query is creating contention**
 ![12.jpg](docs/assets/12.jpg)
 
 **AI-Generated Prescriptive Runbooks for Faster Resolution**
-![12.png](docs/assets/12.png)
-
-**Analyze what query is creating contention**
 ![12.png](docs/assets/12.png)
 
 **Predictive Risk Score from predictive ML model**
