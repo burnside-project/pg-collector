@@ -29,6 +29,9 @@
 
 ![29.jpg](docs/assets/29.jpg)
 
+---
+![30.jpg](docs/assets/30.jpg)
+
 ## Overview
 
 ### Stop reacting to database issues—start predicting them using AI agents.
