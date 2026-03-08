@@ -27,7 +27,7 @@
 
 ---
 
-![29.png](docs/assets/29.png)
+![29.jpg](docs/assets/29.jpg)
 
 ## Overview
 
