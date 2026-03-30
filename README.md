@@ -1,7 +1,7 @@
 <h1 align="center">pg-collector</h1>
 <p align="center">
 <a Get Access href='https://gcp.burnsideproject.ai'></a>
-</p
+</p>
 <p align="center">
   <strong>From Signals to Prediction</strong><br>
   <em>Lightweight Agent for AI-Powered PostgreSQL Intelligence</em>
