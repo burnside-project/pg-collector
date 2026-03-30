@@ -1,5 +1,7 @@
 <h1 align="center">pg-collector</h1>
-
+<p align="center">
+<a Get Access href='https://gcp.burnsideproject.ai'></a>
+</p
 <p align="center">
   <strong>From Signals to Prediction</strong><br>
   <em>Lightweight Agent for AI-Powered PostgreSQL Intelligence</em>
@@ -15,10 +17,6 @@
   <img src="https://img.shields.io/badge/PostgreSQL-12%2B-336791?style=flat-square&logo=postgresql" alt="PostgreSQL 12+">
   <img src="https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey?style=flat-square" alt="Platforms">
 </p>
-
-<p align="center">
-<a Get Access href='https://gcp.burnsideproject.ai'></a>
-</p
 
 <p align="center">
   <a href="#quick-install">Install</a> |
