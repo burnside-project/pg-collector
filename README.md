@@ -17,6 +17,10 @@
 </p>
 
 <p align="center">
+<a Get Access href='https://gcp.burnsideproject.ai'></a>
+</p
+
+<p align="center">
   <a href="#quick-install">Install</a> |
   <a href="#features">Features</a> |
   <a href="#ai-powered-prediction">AI Prediction</a> |
