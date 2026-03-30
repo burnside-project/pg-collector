@@ -1,8 +1,7 @@
 <h1 align="center">pg-collector</h1>
 
 <p align="center">
-  <h2> pg-collector access</h2>
-  <a href="https://gcp.burnsideproject.ai">Get Access</a>
+  <a href="https://gcp.burnsideproject.ai">Get pg-collector Access</a>
 </p>
 
 <p align="center">
